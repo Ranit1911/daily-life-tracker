@@ -7,7 +7,7 @@ const Storage = (() => {
   const DB_VERSION = 2; // Incremented for LocalStorage transition
 
   /* --- Category Definitions --- */
-  const CATEGORIES = {
+  const DEFAULT_CATEGORIES = {
     growth:      { name: 'Growth',      icon: '🌱', goalPercent: 40, goalHours: 9.6  },
     sleep:       { name: 'Sleep',       icon: '😴', goalPercent: 30, goalHours: 7.2  },
     maintenance: { name: 'Maintenance', icon: '🍽', goalPercent: 10, goalHours: 2.4  },
@@ -15,6 +15,29 @@ const Storage = (() => {
     relief:      { name: 'Relief',      icon: '🎮', goalPercent: 5,  goalHours: 1.2  },
     storage:     { name: 'Storage',     icon: '📦', goalPercent: 10, goalHours: 2.4  }
   };
+
+  const CATEGORIES = (() => {
+    try {
+      const val = localStorage.getItem('lifeos_categories');
+      if (val) return JSON.parse(val);
+    } catch {}
+    return JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
+  })();
+
+  function saveCategories(newHoursMap) {
+    let totalHours = 0;
+    Object.values(newHoursMap).forEach(h => totalHours += h);
+    if (totalHours <= 0) totalHours = 1; // Prevent division by zero
+    
+    Object.keys(CATEGORIES).forEach(key => {
+      if (newHoursMap[key] !== undefined) {
+        CATEGORIES[key].goalHours = newHoursMap[key];
+        CATEGORIES[key].goalPercent = Math.round((newHoursMap[key] / totalHours) * 100);
+      }
+    });
+
+    localStorage.setItem('lifeos_categories', JSON.stringify(CATEGORIES));
+  }
 
   /* --- Achievement Definitions --- */
   const ACHIEVEMENT_DEFS = [
@@ -162,6 +185,7 @@ const Storage = (() => {
       resolve({
         version: DB_VERSION,
         exportDate: new Date().toISOString(),
+        categories: CATEGORIES,
         dailyLogs: Object.values(_getLogs()),
         achievements: Object.values(_getAchievementsRaw()),
         settings: getSettings()
@@ -187,6 +211,11 @@ const Storage = (() => {
           const newAch = {};
           data.achievements.forEach(a => newAch[a.id] = a);
           _saveAchievements(newAch);
+        }
+
+        if (data.categories) {
+          Object.assign(CATEGORIES, data.categories);
+          localStorage.setItem('lifeos_categories', JSON.stringify(CATEGORIES));
         }
 
         if (data.settings) {
@@ -459,6 +488,7 @@ const Storage = (() => {
     getAchievements,
     unlockAchievement,
     checkAchievements,
-    getStats
+    getStats,
+    saveCategories
   };
 })();

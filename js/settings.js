@@ -15,6 +15,7 @@ const Settings = (() => {
     setupExportPDF();
     setupImport();
     setupReset();
+    setupGoalsConfig();
 
     // Restore current states
     restoreSettings();
@@ -41,15 +42,15 @@ const Settings = (() => {
 
     // Animation toggle
     const animToggle = document.getElementById('toggle-animations');
-    if (animToggle) {
-      animToggle.classList.toggle('active', settings.animations === true);
-    }
+    if (animToggle) animToggle.classList.toggle('active', settings.animations === true);
 
     // Notification toggle
     const notifToggle = document.getElementById('toggle-notifications');
     if (notifToggle) {
       notifToggle.classList.toggle('active', settings.notifications === true);
     }
+
+    renderGoalsConfig();
   }
 
   /* --- Theme Toggle --- */
@@ -120,6 +121,58 @@ const Settings = (() => {
       Storage.setSetting('notifications', newVal);
       toggle.classList.toggle('active', newVal);
       App.showToast('🔔', `Notifications ${newVal ? 'enabled' : 'disabled'}`);
+    });
+  }
+
+  /* --- Goals Configuration --- */
+  function renderGoalsConfig() {
+    const container = document.getElementById('goals-config-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const categories = Storage.CATEGORIES;
+    Object.keys(categories).forEach(key => {
+      const cat = categories[key];
+      const item = document.createElement('div');
+      item.className = 'settings-item';
+      item.style.marginBottom = '0.5rem';
+      item.innerHTML = `
+        <div class="settings-item-info">
+          <div class="settings-item-icon">${cat.icon}</div>
+          <div class="settings-item-text">
+            <h4>${cat.name}</h4>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <input type="number" id="goal-input-${key}" class="goal-input" value="${cat.goalHours}" min="0" max="24" step="0.25" style="width: 70px; padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-color); font-size: 1rem;">
+          <span style="color: var(--text-secondary);">hours</span>
+        </div>
+      `;
+      container.appendChild(item);
+    });
+  }
+
+  function setupGoalsConfig() {
+    const btn = document.getElementById('btn-save-goals');
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      const newGoals = {};
+      const categories = Storage.CATEGORIES;
+      Object.keys(categories).forEach(key => {
+        const input = document.getElementById(`goal-input-${key}`);
+        if (input) {
+          const val = parseFloat(input.value);
+          if (!isNaN(val) && val >= 0) {
+            newGoals[key] = val;
+          }
+        }
+      });
+      Storage.saveCategories(newGoals);
+      App.showToast('✅', 'Goals updated successfully!');
+      
+      // Re-render dashboard if we're on it, but Settings is currently active
+      // Dashboard will auto-render when navigated to, thanks to App.js calling initDashboard
     });
   }
 

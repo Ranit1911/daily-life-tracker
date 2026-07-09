@@ -175,28 +175,25 @@ const Dashboard = (() => {
         updateCategory(key, parseFloat(slider.value));
       });
 
-      // Press and hold for rapid increment
-      decreaseBtn.addEventListener('mousedown', () => startHold(key, -0.25));
-      decreaseBtn.addEventListener('mouseup', stopHold);
-      decreaseBtn.addEventListener('mouseleave', stopHold);
-      decreaseBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startHold(key, -0.25); });
-      decreaseBtn.addEventListener('touchend', stopHold);
-
-      increaseBtn.addEventListener('mousedown', () => startHold(key, 0.25));
-      increaseBtn.addEventListener('mouseup', stopHold);
-      increaseBtn.addEventListener('mouseleave', stopHold);
-      increaseBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startHold(key, 0.25); });
-      increaseBtn.addEventListener('touchend', stopHold);
-
-      // Click for single increment
-      decreaseBtn.addEventListener('click', () => {
+      // Single tap and press-and-hold for rapid increment
+      const handlePointerDown = (e, delta) => {
+        e.preventDefault(); // Prevents simulated mouse events and double-fires
         const current = todayData.categories[key] || 0;
-        updateCategory(key, Math.max(0, current - 0.25));
-      });
-      increaseBtn.addEventListener('click', () => {
-        const current = todayData.categories[key] || 0;
-        updateCategory(key, Math.min(24, current + 0.25));
-      });
+        const limit = delta > 0 ? 24 : 0;
+        const newVal = delta > 0 ? Math.min(limit, current + delta) : Math.max(limit, current + delta);
+        updateCategory(key, newVal);
+        startHold(key, delta);
+      };
+
+      decreaseBtn.addEventListener('pointerdown', (e) => handlePointerDown(e, -0.25));
+      decreaseBtn.addEventListener('pointerup', stopHold);
+      decreaseBtn.addEventListener('pointerleave', stopHold);
+      decreaseBtn.addEventListener('pointercancel', stopHold);
+
+      increaseBtn.addEventListener('pointerdown', (e) => handlePointerDown(e, 0.25));
+      increaseBtn.addEventListener('pointerup', stopHold);
+      increaseBtn.addEventListener('pointerleave', stopHold);
+      increaseBtn.addEventListener('pointercancel', stopHold);
     });
   }
 
