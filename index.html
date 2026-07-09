@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-accent="purple" data-animations="true">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LifeOS — Personal Life Balance & Productivity Dashboard. Track your daily time allocation across Growth, Sleep, Maintenance, Workout, Relief, and Storage categories.">
+  <meta name="theme-color" content="#07071a">
+  <title>LifeOS — Life Balance Dashboard</title>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+  <!-- jsPDF & AutoTable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+  <div class="app-layout">
+
+    <!-- ========== SIDEBAR (Desktop) ========== -->
+    <aside class="sidebar">
+      <a class="sidebar-logo" href="#dashboard">
+        <div class="sidebar-logo-icon">⚡</div>
+        <div class="sidebar-logo-text">Life<span>OS</span></div>
+      </a>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active ripple-container" data-view="dashboard">
+          <span class="nav-item-icon">📊</span>
+          <span class="nav-item-label">Dashboard</span>
+        </button>
+        <button class="nav-item ripple-container" data-view="weekly">
+          <span class="nav-item-icon">📅</span>
+          <span class="nav-item-label">Weekly</span>
+        </button>
+        <button class="nav-item ripple-container" data-view="monthly">
+          <span class="nav-item-icon">🗓</span>
+          <span class="nav-item-label">Monthly</span>
+        </button>
+        <button class="nav-item ripple-container" data-view="stats">
+          <span class="nav-item-icon">📈</span>
+          <span class="nav-item-label">Statistics</span>
+        </button>
+        <button class="nav-item ripple-container" data-view="achievements">
+          <span class="nav-item-icon">🏆</span>
+          <span class="nav-item-label">Achievements</span>
+        </button>
+        <button class="nav-item ripple-container" data-view="settings">
+          <span class="nav-item-icon">⚙️</span>
+          <span class="nav-item-label">Settings</span>
+        </button>
+      </nav>
+
+      <div style="padding: var(--space-sm); text-align: center;">
+        <div style="font-size: var(--fs-xs); color: var(--text-tertiary);">LifeOS v1.0</div>
+      </div>
+    </aside>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="main-content">
+
+      <!-- ===== DASHBOARD VIEW ===== -->
+      <section id="view-dashboard" class="view-section active view-enter">
+
+        <!-- Greeting -->
+        <div class="page-header">
+          <h1 class="greeting-text" id="greeting-text">Good Evening 🌙</h1>
+          <p class="date-text" id="date-text"></p>
+          <p class="quote-text" id="quote-text"></p>
+        </div>
+
+        <!-- Circular Progress -->
+        <div class="score-section">
+          <div class="circular-progress-wrapper animate-fade-in-scale">
+            <svg class="circular-progress-svg" viewBox="0 0 220 220">
+              <defs>
+                <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop id="scoreGradStart" offset="0%" stop-color="#22c55e" />
+                  <stop id="scoreGradEnd" offset="100%" stop-color="#16a34a" />
+                </linearGradient>
+              </defs>
+              <circle class="circular-progress-bg" cx="110" cy="110" r="95" />
+              <circle class="circular-progress-bar" id="score-progress-bar"
+                cx="110" cy="110" r="95"
+                style="stroke-dasharray: 597; stroke-dashoffset: 597;" />
+            </svg>
+            <div class="circular-progress-text">
+              <div class="score-value" id="score-value">0%</div>
+              <div class="score-label" id="score-label">Needs Work</div>
+              <div class="score-subtitle">Life Balance</div>
+            </div>
+          </div>
+          <p class="encouragement-text" id="encouragement-text"></p>
+        </div>
+
+        <!-- Category Cards -->
+        <h2 class="section-title">Daily Routine</h2>
+        <div class="categories-grid stagger-children" id="categories-grid"></div>
+
+        <!-- Dashboard Stats -->
+        <h2 class="section-title">Today's Overview</h2>
+        <div class="stats-row stagger-children" id="dashboard-stats"></div>
+
+        <!-- Charts -->
+        <h2 class="section-title">Insights</h2>
+        <div class="charts-grid">
+          <div class="chart-card animate-fade-in-up">
+            <div class="chart-card-title">Today's Distribution</div>
+            <div class="chart-wrapper">
+              <canvas id="chart-pie"></canvas>
+            </div>
+          </div>
+          <div class="chart-card animate-fade-in-up" style="animation-delay: 100ms">
+            <div class="chart-card-title">Goal vs Actual</div>
+            <div class="chart-wrapper">
+              <canvas id="chart-distribution"></canvas>
+            </div>
+          </div>
+          <div class="chart-card animate-fade-in-up" style="animation-delay: 200ms">
+            <div class="chart-card-title">Weekly Scores</div>
+            <div class="chart-wrapper">
+              <canvas id="chart-bar"></canvas>
+            </div>
+          </div>
+          <div class="chart-card animate-fade-in-up" style="animation-delay: 300ms">
+            <div class="chart-card-title">Monthly Trend</div>
+            <div class="chart-wrapper">
+              <canvas id="chart-line"></canvas>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ===== WEEKLY VIEW ===== -->
+      <section id="view-weekly" class="view-section">
+        <div class="page-header">
+          <h1 class="greeting-text">Weekly View 📅</h1>
+          <p class="date-text">Track your progress through the week</p>
+        </div>
+
+        <div class="week-navigation">
+          <button class="week-nav-btn ripple-container" id="week-prev" aria-label="Previous week">◀</button>
+          <span class="week-title" id="week-title"></span>
+          <button class="week-nav-btn ripple-container" id="week-next" aria-label="Next week">▶</button>
+        </div>
+
+        <div class="weekly-grid stagger-children" id="weekly-grid"></div>
+      </section>
+
+      <!-- ===== MONTHLY VIEW ===== -->
+      <section id="view-monthly" class="view-section">
+        <div class="page-header">
+          <h1 class="greeting-text">Monthly Calendar 🗓</h1>
+          <p class="date-text">Your life balance at a glance</p>
+        </div>
+
+        <div class="calendar-header">
+          <button class="calendar-nav-btn ripple-container" id="month-prev" aria-label="Previous month">◀</button>
+          <span class="calendar-title" id="calendar-title"></span>
+          <button class="calendar-nav-btn ripple-container" id="month-next" aria-label="Next month">▶</button>
+        </div>
+
+        <div class="glass-card" style="padding: var(--space-xl);">
+          <div class="calendar-grid" id="calendar-grid"></div>
+        </div>
+
+        <div class="calendar-legend" style="margin-top: var(--space-lg);">
+          <div class="legend-item">
+            <div class="legend-dot" style="background: var(--color-excellent);"></div>
+            <span>Excellent (≥80%)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background: var(--color-good);"></div>
+            <span>Average (50–79%)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background: var(--color-poor);"></div>
+            <span>Poor (&lt;50%)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background: var(--color-nodata);"></div>
+            <span>No data</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== STATISTICS VIEW ===== -->
+      <section id="view-stats" class="view-section">
+        <div class="page-header">
+          <h1 class="greeting-text">Statistics 📈</h1>
+          <p class="date-text">Your all-time performance overview</p>
+        </div>
+
+        <div class="stats-grid stagger-children" id="stats-grid"></div>
+      </section>
+
+      <!-- ===== ACHIEVEMENTS VIEW ===== -->
+      <section id="view-achievements" class="view-section">
+        <div class="page-header">
+          <h1 class="greeting-text">Achievements 🏆</h1>
+          <p class="date-text">Unlock badges by building great habits</p>
+        </div>
+
+        <div class="achievements-grid stagger-children" id="achievements-grid"></div>
+      </section>
+
+      <!-- ===== SETTINGS VIEW ===== -->
+      <section id="view-settings" class="view-section">
+        <div class="page-header">
+          <h1 class="greeting-text">Settings ⚙️</h1>
+          <p class="date-text">Customize your experience</p>
+        </div>
+
+        <!-- Appearance -->
+        <div class="settings-section">
+          <h2 class="settings-section-title">Appearance</h2>
+          <div class="settings-card">
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <div class="settings-item-icon">🌙</div>
+                <div class="settings-item-text">
+                  <h4>Dark Mode</h4>
+                  <p>Toggle dark and light theme</p>
+                </div>
+              </div>
+              <div class="toggle active" id="toggle-theme" role="switch" aria-label="Toggle dark mode"></div>
+            </div>
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <div class="settings-item-icon">🎨</div>
+                <div class="settings-item-text">
+                  <h4>Accent Color</h4>
+                  <p>Choose your preferred accent color</p>
+                </div>
+              </div>
+              <div class="accent-swatches">
+                <div class="accent-swatch active" data-accent="purple" title="Purple"></div>
+                <div class="accent-swatch" data-accent="blue" title="Blue"></div>
+                <div class="accent-swatch" data-accent="teal" title="Teal"></div>
+                <div class="accent-swatch" data-accent="coral" title="Coral"></div>
+                <div class="accent-swatch" data-accent="amber" title="Amber"></div>
+                <div class="accent-swatch" data-accent="rose" title="Rose"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preferences -->
+        <div class="settings-section">
+          <h2 class="settings-section-title">Preferences</h2>
+          <div class="settings-card">
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <div class="settings-item-icon">✨</div>
+                <div class="settings-item-text">
+                  <h4>Animations</h4>
+                  <p>Enable or disable UI animations</p>
+                </div>
+              </div>
+              <div class="toggle active" id="toggle-animations" role="switch" aria-label="Toggle animations"></div>
+            </div>
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <div class="settings-item-icon">🔔</div>
+                <div class="settings-item-text">
+                  <h4>Notifications</h4>
+                  <p>Enable or disable toast notifications</p>
+                </div>
+              </div>
+              <div class="toggle active" id="toggle-notifications" role="switch" aria-label="Toggle notifications"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Management -->
+        <div class="settings-section">
+          <h2 class="settings-section-title">Data Management</h2>
+          <div class="settings-card">
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <div class="settings-item-icon">💾</div>
+                <div class="settings-item-text">
+                  <h4>Export Data (JSON)</h4>
+                  <p>Download all your data as a JSON file</p>
+                </div>
+              </div>
+              <button class="settings-btn ripple-container" id="btn-export">Export</button>
+            </div>
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <div class="settings-item-icon">📄</div>
+                <div class="settings-item-text">
+                  <h4>Export Data (PDF)</h4>
+                  <p>Download a printable PDF report</p>
+                </div>
+              </div>
+              <button class="settings-btn ripple-container" id="btn-export-pdf">Export PDF</button>
+            </div>
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <div class="settings-item-icon">📥</div>
+                <div class="settings-item-text">
+                  <h4>Import Data</h4>
+                  <p>Restore from a JSON backup file</p>
+                </div>
+              </div>
+              <button class="settings-btn ripple-container" id="btn-import">Import</button>
+            </div>
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <div class="settings-item-icon">🗑️</div>
+                <div class="settings-item-text">
+                  <h4>Reset All Data</h4>
+                  <p>Permanently delete all data and settings</p>
+                </div>
+              </div>
+              <button class="settings-btn danger ripple-container" id="btn-reset">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- About -->
+        <div class="settings-section">
+          <h2 class="settings-section-title">About</h2>
+          <div class="settings-card">
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <div class="settings-item-icon">⚡</div>
+                <div class="settings-item-text">
+                  <h4>LifeOS</h4>
+                  <p>Version 1.0 — Personal Life Balance Dashboard</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- ========== BOTTOM NAV (Mobile) ========== -->
+    <nav class="bottom-nav">
+      <button class="bottom-nav-item active" data-view="dashboard" aria-label="Dashboard">
+        <span class="nav-icon">📊</span>
+        <span>Home</span>
+      </button>
+      <button class="bottom-nav-item" data-view="weekly" aria-label="Weekly">
+        <span class="nav-icon">📅</span>
+        <span>Weekly</span>
+      </button>
+      <button class="bottom-nav-item" data-view="monthly" aria-label="Monthly">
+        <span class="nav-icon">🗓</span>
+        <span>Monthly</span>
+      </button>
+      <button class="bottom-nav-item" data-view="stats" aria-label="Statistics">
+        <span class="nav-icon">📈</span>
+        <span>Stats</span>
+      </button>
+      <button class="bottom-nav-item" data-view="achievements" aria-label="Achievements">
+        <span class="nav-icon">🏆</span>
+        <span>Awards</span>
+      </button>
+      <button class="bottom-nav-item" data-view="settings" aria-label="Settings">
+        <span class="nav-icon">⚙️</span>
+        <span>Settings</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- ========== MODAL ========== -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal"></div>
+  </div>
+
+  <!-- ========== SCRIPTS ========== -->
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/stats.js"></script>
+  <script src="js/settings.js"></script>
+</body>
+</html>
