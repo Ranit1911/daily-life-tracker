@@ -10,6 +10,7 @@ const Dashboard = (() => {
   /* --- Initialize --- */
   async function init() {
     todayData = await Storage.getDayData(Storage.getTodayString());
+
     renderGreeting();
     renderCircularProgress();
     renderCategoryCards();
@@ -29,7 +30,14 @@ const Dashboard = (() => {
     updateCategoryCards();
     renderDashboardStats();
     renderEncouragement();
+
+    // Update daily change if Streak module is loaded
+    if (typeof Streak !== 'undefined') {
+      Streak.renderDailyChange();
+    }
   }
+
+
 
   /* --- Render Greeting --- */
   function renderGreeting() {
@@ -67,11 +75,11 @@ const Dashboard = (() => {
     const gradEnd = document.getElementById('scoreGradEnd');
     if (gradStart && gradEnd) {
       if (score >= 90) {
-        gradStart.setAttribute('stop-color', '#22c55e');
-        gradEnd.setAttribute('stop-color', '#16a34a');
+        gradStart.setAttribute('stop-color', '#10b981');
+        gradEnd.setAttribute('stop-color', '#059669');
       } else if (score >= 75) {
         gradStart.setAttribute('stop-color', '#84cc16');
-        gradEnd.setAttribute('stop-color', '#22c55e');
+        gradEnd.setAttribute('stop-color', '#10b981');
       } else if (score >= 55) {
         gradStart.setAttribute('stop-color', '#eab308');
         gradEnd.setAttribute('stop-color', '#f97316');
@@ -135,6 +143,10 @@ const Dashboard = (() => {
             <div class="category-icon">${cat.icon}</div>
             <div>
               <div class="category-name">${cat.name}</div>
+              <span class="daily-change neutral" id="change-${key}">
+                <span class="daily-change-icon">▬</span>
+                <span>0%</span>
+              </span>
             </div>
           </div>
           <span class="category-goal-badge">${cat.goalPercent}%</span>
@@ -157,10 +169,10 @@ const Dashboard = (() => {
           <div class="progress-bar-fill" id="bar-${key}" style="width: ${progress}%"></div>
         </div>
         <div class="category-controls">
-          <button class="control-btn ripple-container" data-action="decrease" data-category="${key}" aria-label="Decrease ${cat.name}">−</button>
+          <button class="control-btn ripple-container btn-press" data-action="decrease" data-category="${key}" aria-label="Decrease ${cat.name}">−</button>
           <input type="range" class="category-slider" id="slider-${key}" min="0" max="${maxHours}" step="0.25" value="${currentHours}" aria-label="${cat.name} hours">
           <span class="category-percentage" id="pct-${key}">${App.formatHours(currentHours)}</span>
-          <button class="control-btn ripple-container" data-action="increase" data-category="${key}" aria-label="Increase ${cat.name}">+</button>
+          <button class="control-btn ripple-container btn-press" data-action="increase" data-category="${key}" aria-label="Increase ${cat.name}">+</button>
         </div>
       `;
 
@@ -197,6 +209,11 @@ const Dashboard = (() => {
     });
 
     updateSlidersMax();
+
+    // Initialize Lucide icons on new elements
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
   }
 
   /* --- Hold for rapid increment --- */
@@ -327,7 +344,7 @@ const Dashboard = (() => {
     if (!container) return;
 
     container.innerHTML = statsData.map(stat => `
-      <div class="stat-card">
+      <div class="stat-card card-elevate">
         <div class="stat-card-icon">${stat.icon}</div>
         <div class="stat-card-value">${stat.value}</div>
         <div class="stat-card-label">${stat.label}</div>

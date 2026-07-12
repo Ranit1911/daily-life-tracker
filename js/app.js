@@ -201,7 +201,7 @@ const App = (() => {
     container.className = 'confetti-container';
     document.body.appendChild(container);
 
-    const colors = ['#22c55e', '#818cf8', '#f97316', '#ef4444', '#ec4899', '#06b6d4', '#eab308', '#8b5cf6'];
+    const colors = ['#10b981', '#818cf8', '#f97316', '#f43f5e', '#ec4899', '#06b6d4', '#eab308', '#8b5cf6'];
 
     for (let i = 0; i < 80; i++) {
       const piece = document.createElement('div');
@@ -239,6 +239,13 @@ const App = (() => {
     }, duration);
   }
 
+  /* --- Initialize Lucide Icons --- */
+  function initLucideIcons() {
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  }
+
   /* --- Initialize --- */
   async function init() {
     // Load settings
@@ -249,6 +256,9 @@ const App = (() => {
 
     // Init DB
     await Storage.init();
+
+    // Initialize Lucide Icons
+    initLucideIcons();
 
     // Setup router
     window.addEventListener('hashchange', handleRoute);
@@ -271,11 +281,20 @@ const App = (() => {
 
     // Init modules
     Dashboard.init();
+
+    // Init new modules
+    if (typeof Streak !== 'undefined') Streak.init();
+    if (typeof Widgets !== 'undefined') Widgets.init();
+    if (typeof Planner !== 'undefined') Planner.init();
+
     Charts.init();
     Calendar.init();
     Stats.init();
     Analytics.init();
     Settings.init();
+
+    // Re-init Lucide icons after all modules render
+    setTimeout(() => initLucideIcons(), 100);
 
     // Listen for data changes
     on('dataChanged', async () => {
@@ -287,6 +306,9 @@ const App = (() => {
         });
         Stats.refresh();
       }
+
+      // Re-init icons for any newly rendered elements
+      setTimeout(() => initLucideIcons(), 50);
     });
   }
 
@@ -304,6 +326,7 @@ const App = (() => {
     addRipple,
     triggerConfetti,
     showToast,
+    initLucideIcons,
     get currentView() { return currentView; }
   };
 })();

@@ -87,18 +87,6 @@
   }
 }
 
-/* --- Confetti Fall --- */
-@keyframes confettiFall {
-  0% {
-    transform: translateY(-100vh) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100vh) rotate(720deg);
-    opacity: 0;
-  }
-}
-
 /* --- Confetti Piece --- */
 @keyframes confettiPiece {
   0% {
@@ -162,6 +150,198 @@
 }
 
 /* ============================================
+   NEW: Battery Fill Animation
+   ============================================ */
+@keyframes batteryFill {
+  from {
+    height: 0%;
+    opacity: 0.3;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes batteryPulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+}
+
+/* ============================================
+   NEW: Badge Pop Animation
+   ============================================ */
+@keyframes badgePop {
+  0% { transform: scale(0.6); opacity: 0; }
+  50% { transform: scale(1.15); }
+  70% { transform: scale(0.95); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes badgeGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.3), 0 0 16px rgba(245, 158, 11, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.5), 0 0 32px rgba(245, 158, 11, 0.2);
+  }
+}
+
+/* ============================================
+   NEW: Lock Animation
+   ============================================ */
+@keyframes lockBounce {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-8deg); }
+  50% { transform: rotate(8deg); }
+  75% { transform: rotate(-4deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes unlockSlide {
+  0% { transform: translateY(0) rotate(0); }
+  40% { transform: translateY(-3px) rotate(-15deg); }
+  100% { transform: translateY(-3px) rotate(-15deg); }
+}
+
+@keyframes lockGlow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.3)); }
+  50% { filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.5)); }
+}
+
+@keyframes unlockGlow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.3)); }
+  50% { filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.5)); }
+}
+
+/* ============================================
+   NEW: Timeline Animation
+   ============================================ */
+@keyframes timelinePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0);
+  }
+}
+
+@keyframes timelineFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============================================
+   NEW: Pill Status Transition
+   ============================================ */
+@keyframes pillComplete {
+  0% { transform: scale(0.9); opacity: 0.5; }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes checkmark {
+  0% { stroke-dashoffset: 24; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* ============================================
+   NEW: Card Elevation
+   ============================================ */
+@keyframes elevate {
+  from {
+    transform: translateY(0);
+    box-shadow: var(--shadow-soft-sm);
+  }
+  to {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-soft-lg);
+  }
+}
+
+/* ============================================
+   NEW: Spring Scale
+   ============================================ */
+@keyframes springScale {
+  0% { transform: scale(1); }
+  30% { transform: scale(0.95); }
+  60% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+/* ============================================
+   NEW: Skeleton Loading
+   ============================================ */
+@keyframes skeletonPulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes skeletonWave {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ============================================
+   NEW: Tooltip Fade
+   ============================================ */
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes tooltipFadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(4px) scale(0.96);
+  }
+}
+
+/* ============================================
+   NEW: Subtle Entrance for Widgets
+   ============================================ */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
    VIEW TRANSITIONS
    ============================================ */
 .view-enter {
@@ -207,6 +387,106 @@
 .animate-glow-ring {
   animation: glowRing 2s ease-in-out infinite;
 }
+.animate-badge-pop {
+  animation: badgePop 500ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.animate-spring {
+  animation: springScale 400ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.animate-slide-up {
+  animation: slideUp 400ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ============================================
+   MICRO-INTERACTION CLASSES
+   ============================================ */
+
+/* Button press effect */
+.btn-press {
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.btn-press:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-soft-md);
+}
+.btn-press:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: var(--shadow-soft-sm);
+}
+
+/* Card hover elevation */
+.card-elevate {
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.card-elevate:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft-lg);
+}
+
+/* Checkbox tick animation */
+.check-animate {
+  transition: all var(--transition-fast);
+}
+.check-animate.checked {
+  animation: springScale 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Skeleton loading placeholder */
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--bg-input) 25%,
+    rgba(255,255,255,0.08) 37%,
+    var(--bg-input) 63%
+  );
+  background-size: 200% 100%;
+  animation: skeletonWave 1.5s ease-in-out infinite;
+  border-radius: var(--radius-md);
+}
+
+[data-theme="light"] .skeleton {
+  background: linear-gradient(90deg,
+    rgba(0,0,0,0.06) 25%,
+    rgba(0,0,0,0.02) 37%,
+    rgba(0,0,0,0.06) 63%
+  );
+  background-size: 200% 100%;
+}
+
+/* Tooltip */
+.tooltip-wrapper {
+  position: relative;
+}
+.tooltip-wrapper .tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  z-index: var(--z-dropdown);
+  box-shadow: var(--shadow-soft-md);
+  animation: tooltipFadeOut 150ms ease forwards;
+}
+.tooltip-wrapper:hover .tooltip {
+  animation: tooltipFadeIn 200ms ease forwards;
+}
+.tooltip-wrapper .tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--bg-secondary);
+}
 
 /* ============================================
    STAGGERED CHILDREN
@@ -225,6 +505,8 @@
 .stagger-children > *:nth-child(8) { animation-delay: 400ms; }
 .stagger-children > *:nth-child(9) { animation-delay: 450ms; }
 .stagger-children > *:nth-child(10) { animation-delay: 500ms; }
+.stagger-children > *:nth-child(11) { animation-delay: 550ms; }
+.stagger-children > *:nth-child(12) { animation-delay: 600ms; }
 
 /* ============================================
    RIPPLE EFFECT

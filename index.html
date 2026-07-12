@@ -11,6 +11,10 @@
   <link rel="stylesheet" href="css/themes.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/premium.css">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
@@ -31,37 +35,37 @@
 
       <nav class="sidebar-nav">
         <button class="nav-item active ripple-container" data-view="dashboard">
-          <span class="nav-item-icon">📊</span>
+          <span class="nav-item-icon"><i data-lucide="layout-dashboard" class="lucide-icon"></i></span>
           <span class="nav-item-label">Dashboard</span>
         </button>
         <button class="nav-item ripple-container" data-view="weekly">
-          <span class="nav-item-icon">📅</span>
+          <span class="nav-item-icon"><i data-lucide="calendar-days" class="lucide-icon"></i></span>
           <span class="nav-item-label">Weekly</span>
         </button>
         <button class="nav-item ripple-container" data-view="monthly">
-          <span class="nav-item-icon">🗓</span>
+          <span class="nav-item-icon"><i data-lucide="calendar" class="lucide-icon"></i></span>
           <span class="nav-item-label">Monthly</span>
         </button>
         <button class="nav-item ripple-container" data-view="stats">
-          <span class="nav-item-icon">📈</span>
+          <span class="nav-item-icon"><i data-lucide="trending-up" class="lucide-icon"></i></span>
           <span class="nav-item-label">Statistics</span>
         </button>
         <button class="nav-item ripple-container" data-view="analytics">
-          <span class="nav-item-icon">🔬</span>
+          <span class="nav-item-icon"><i data-lucide="bar-chart-3" class="lucide-icon"></i></span>
           <span class="nav-item-label">Analytics</span>
         </button>
         <button class="nav-item ripple-container" data-view="achievements">
-          <span class="nav-item-icon">🏆</span>
+          <span class="nav-item-icon"><i data-lucide="trophy" class="lucide-icon"></i></span>
           <span class="nav-item-label">Achievements</span>
         </button>
         <button class="nav-item ripple-container" data-view="settings">
-          <span class="nav-item-icon">⚙️</span>
+          <span class="nav-item-icon"><i data-lucide="settings" class="lucide-icon"></i></span>
           <span class="nav-item-label">Settings</span>
         </button>
       </nav>
 
       <div style="padding: var(--space-sm); text-align: center;">
-        <div style="font-size: var(--fs-xs); color: var(--text-tertiary);">LifeOS v1.0</div>
+        <div style="font-size: var(--fs-xs); color: var(--text-tertiary);">LifeOS v2.0</div>
       </div>
     </aside>
 
@@ -71,140 +75,213 @@
       <!-- ===== DASHBOARD VIEW ===== -->
       <section id="view-dashboard" class="view-section active view-enter">
 
-        <!-- Greeting -->
-        <div class="page-header">
-          <h1 class="greeting-text" id="greeting-text">Good Evening 🌙</h1>
-          <p class="date-text" id="date-text"></p>
-          <p class="quote-text" id="quote-text"></p>
-        </div>
-
-        <!-- Circular Progress -->
-        <div class="score-section">
-          <div class="circular-progress-wrapper animate-fade-in-scale">
-            <svg class="circular-progress-svg" viewBox="0 0 220 220">
-              <defs>
-                <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop id="scoreGradStart" offset="0%" stop-color="#22c55e" />
-                  <stop id="scoreGradEnd" offset="100%" stop-color="#16a34a" />
-                </linearGradient>
-              </defs>
-              <circle class="circular-progress-bg" cx="110" cy="110" r="95" />
-              <circle class="circular-progress-bar" id="score-progress-bar"
-                cx="110" cy="110" r="95"
-                style="stroke-dasharray: 597; stroke-dashoffset: 597;" />
-            </svg>
-            <div class="circular-progress-text">
-              <div class="score-value" id="score-value">0%</div>
-              <div class="score-label" id="score-label">Needs Work</div>
-              <div class="score-subtitle">Life Balance</div>
+               <!-- Dashboard Top Grid: Greeting + Streak, circular progress, and widgets -->
+        <div class="dashboard-top-grid">
+          
+          <!-- Column 1: Greeting & Streak -->
+          <div class="dashboard-top-column top-left-col">
+            <div class="page-header" style="margin-bottom: var(--space-md);">
+              <h1 class="greeting-text" id="greeting-text">Good Evening 🌙</h1>
+              <p class="date-text" id="date-text"></p>
+              <p class="quote-text" id="quote-text" style="font-size: var(--fs-sm);"></p>
             </div>
-          </div>
-          <p class="encouragement-text" id="encouragement-text"></p>
-        </div>
-
-        <!-- Performance Indicator Circles -->
-        <div class="performance-circles-section">
-          <h2 class="section-title">Performance Indicators</h2>
-          <div class="performance-circles-row" id="performance-circles-row">
-            <!-- Good Circle -->
-            <div class="perf-circle-card perf-good animate-fade-in-scale">
-              <div class="perf-circle-wrapper">
-                <svg class="perf-circle-svg" viewBox="0 0 140 140">
-                  <defs>
-                    <linearGradient id="goodGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#22c55e" />
-                      <stop offset="100%" stop-color="#16a34a" />
-                    </linearGradient>
-                  </defs>
-                  <circle class="perf-circle-bg" cx="70" cy="70" r="58" />
-                  <circle class="perf-circle-bar" id="perf-good-bar" cx="70" cy="70" r="58"
-                    style="stroke: url(#goodGradient); stroke-dasharray: 364.42; stroke-dashoffset: 364.42;" />
-                </svg>
-                <div class="perf-circle-text">
-                  <div class="perf-circle-value" id="perf-good-value">0%</div>
-                  <div class="perf-circle-label" style="color: #22c55e;">Good</div>
+            
+            <!-- Horizontal Streak Day Blocks -->
+            <div class="streak-battery-section">
+              <div class="battery-container" id="battery-container">
+                <div class="battery-widget">
+                  <div class="battery-body" id="battery-body">
+                    <div class="battery-segments" id="battery-segments">
+                      <!-- 7 segments filled by streak.js -->
+                    </div>
+                  </div>
+                  <div class="battery-label-row">
+                    <span class="battery-label">Streak</span>
+                    <span class="battery-day-text" id="battery-day-text">Day 0</span>
+                  </div>
+                </div>
+                <div class="battery-info">
+                  <div class="battery-info-title" id="streak-title">Daily Streak</div>
+                  <div class="battery-info-subtitle" id="streak-subtitle">Start logging to build your streak!</div>
                 </div>
               </div>
-              <div class="perf-circle-desc">Growth & Workout exceeded goals</div>
+              <div id="weekly-badge-container">
+                <!-- Weekly badge rendered by streak.js -->
+              </div>
             </div>
-            <!-- Bad Circle -->
-            <div class="perf-circle-card perf-bad animate-fade-in-scale" style="animation-delay: 100ms">
-              <div class="perf-circle-wrapper">
-                <svg class="perf-circle-svg" viewBox="0 0 140 140">
+          </div>
+
+          <!-- Column 2: Life Balance Score -->
+          <div class="dashboard-top-column top-center-col">
+            <div class="score-section" style="margin-bottom: 0;">
+              <div class="circular-progress-wrapper animate-fade-in-scale" style="width: 170px; height: 170px; margin: 0 auto var(--space-xs);">
+                <svg class="circular-progress-svg" viewBox="0 0 220 220">
                   <defs>
-                    <linearGradient id="badGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#ef4444" />
-                      <stop offset="100%" stop-color="#dc2626" />
+                    <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop id="scoreGradStart" offset="0%" stop-color="#10b981" />
+                      <stop id="scoreGradEnd" offset="100%" stop-color="#059669" />
                     </linearGradient>
                   </defs>
-                  <circle class="perf-circle-bg" cx="70" cy="70" r="58" />
-                  <circle class="perf-circle-bar" id="perf-bad-bar" cx="70" cy="70" r="58"
-                    style="stroke: url(#badGradient); stroke-dasharray: 364.42; stroke-dashoffset: 364.42;" />
+                  <circle class="circular-progress-bg" cx="110" cy="110" r="95" />
+                  <circle class="circular-progress-bar" id="score-progress-bar"
+                    cx="110" cy="110" r="95"
+                    style="stroke-dasharray: 597; stroke-dashoffset: 597;" />
                 </svg>
-                <div class="perf-circle-text">
-                  <div class="perf-circle-value" id="perf-bad-value">0%</div>
-                  <div class="perf-circle-label" style="color: #ef4444;">Bad</div>
+                <div class="circular-progress-text">
+                  <div class="score-value" id="score-value" style="font-size: var(--fs-2xl);">0%</div>
+                  <div class="score-label" id="score-label" style="font-size: var(--fs-xs);">Needs Work</div>
+                  <div class="score-subtitle" style="font-size: 9px;">Life Balance</div>
                 </div>
               </div>
-              <div class="perf-circle-desc">Relief, Sleep & Maintenance exceeded goals</div>
+              <p class="encouragement-text" id="encouragement-text" style="font-size: var(--fs-xs); margin-top: 0; text-align: center;"></p>
             </div>
-            <!-- Neutral Circle -->
-            <div class="perf-circle-card perf-neutral animate-fade-in-scale" style="animation-delay: 200ms">
-              <div class="perf-circle-wrapper">
-                <svg class="perf-circle-svg" viewBox="0 0 140 140">
-                  <defs>
-                    <linearGradient id="neutralGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#3b82f6" />
-                      <stop offset="100%" stop-color="#2563eb" />
-                    </linearGradient>
-                  </defs>
-                  <circle class="perf-circle-bg" cx="70" cy="70" r="58" />
-                  <circle class="perf-circle-bar" id="perf-neutral-bar" cx="70" cy="70" r="58"
-                    style="stroke: url(#neutralGradient); stroke-dasharray: 364.42; stroke-dashoffset: 364.42;" />
-                </svg>
-                <div class="perf-circle-text">
-                  <div class="perf-circle-value" id="perf-neutral-value">0%</div>
-                  <div class="perf-circle-label" style="color: #3b82f6;">Neutral</div>
+          </div>
+
+          <!-- Column 3: Widgets (Quick Notes + Next Hours Timeline) -->
+          <div class="dashboard-top-column top-right-col">
+            <!-- Quick Notes Widget -->
+            <div class="widget-card" id="quick-notes-widget" style="padding: var(--space-md); margin-bottom: var(--space-sm);">
+              <div class="widget-header" style="margin-bottom: var(--space-2xs);">
+                <div class="widget-title" style="font-size: var(--fs-sm);">
+                  <i data-lucide="pin" class="widget-title-icon lucide-icon" style="width:14px;height:14px;"></i>
+                  Quick Notes
+                </div>
+                <div class="widget-meta">
+                  <span class="notes-save-indicator" id="notes-save-indicator">
+                    <i data-lucide="check" style="width:10px;height:10px;" class="lucide-icon"></i> Saved
+                  </span>
+                  <span id="notes-timestamp" style="font-size: 10px; color: var(--text-tertiary);"></span>
                 </div>
               </div>
-              <div class="perf-circle-desc">All categories matched goals</div>
+              <textarea class="notes-textarea" id="quick-notes-textarea"
+                placeholder="Jot down quick thoughts..."
+                aria-label="Quick Notes" style="min-height: 50px; font-size: var(--fs-sm); padding: var(--space-xs);"></textarea>
+            </div>
+
+            <!-- Next Hours Timeline -->
+            <div class="widget-card" id="next-hours-widget" style="padding: var(--space-md);">
+              <div class="widget-header" style="margin-bottom: var(--space-2xs);">
+                <div class="widget-title" style="font-size: var(--fs-sm);">
+                  <i data-lucide="clock" class="widget-title-icon lucide-icon" style="width:14px;height:14px;"></i>
+                  Next Hours
+                </div>
+                <button class="timeline-add-btn" id="timeline-add-btn" aria-label="Add timeline entry" style="margin-top:0; width:auto; padding: 2px 8px; font-size: var(--fs-xs);">
+                  <i data-lucide="plus" style="width:12px;height:12px;" class="lucide-icon"></i> Add
+                </button>
+              </div>
+              <div class="timeline-list" id="timeline-list">
+                <!-- Rendered by widgets.js -->
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Category Cards -->
-        <h2 class="section-title">Daily Routine</h2>
-        <div class="categories-grid stagger-children" id="categories-grid"></div>
+        <!-- Full Width Content Below -->
+        <div class="dashboard-main-content">
+          <!-- Performance Indicator Circles -->
+          <div class="performance-circles-section">
+            <h2 class="section-title">Performance Indicators</h2>
+            <div class="performance-circles-row" id="performance-circles-row">
+              <!-- Good Circle -->
+              <div class="perf-circle-card perf-good animate-fade-in-scale">
+                <div class="perf-circle-wrapper">
+                  <svg class="perf-circle-svg" viewBox="0 0 140 140">
+                    <defs>
+                      <linearGradient id="goodGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#10b981" />
+                        <stop offset="100%" stop-color="#059669" />
+                      </linearGradient>
+                    </defs>
+                    <circle class="perf-circle-bg" cx="70" cy="70" r="58" />
+                    <circle class="perf-circle-bar" id="perf-good-bar" cx="70" cy="70" r="58"
+                      style="stroke: url(#goodGradient); stroke-dasharray: 364.42; stroke-dashoffset: 364.42;" />
+                  </svg>
+                  <div class="perf-circle-text">
+                    <div class="perf-circle-value" id="perf-good-value">0%</div>
+                    <div class="perf-circle-label" style="color: #10b981;">Good</div>
+                  </div>
+                </div>
+                <div class="perf-circle-desc">Growth & Workout exceeded goals</div>
+              </div>
+              <!-- Bad Circle -->
+              <div class="perf-circle-card perf-bad animate-fade-in-scale" style="animation-delay: 100ms">
+                <div class="perf-circle-wrapper">
+                  <svg class="perf-circle-svg" viewBox="0 0 140 140">
+                    <defs>
+                      <linearGradient id="badGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#f43f5e" />
+                        <stop offset="100%" stop-color="#e11d48" />
+                      </linearGradient>
+                    </defs>
+                    <circle class="perf-circle-bg" cx="70" cy="70" r="58" />
+                    <circle class="perf-circle-bar" id="perf-bad-bar" cx="70" cy="70" r="58"
+                      style="stroke: url(#badGradient); stroke-dasharray: 364.42; stroke-dashoffset: 364.42;" />
+                  </svg>
+                  <div class="perf-circle-text">
+                    <div class="perf-circle-value" id="perf-bad-value">0%</div>
+                    <div class="perf-circle-label" style="color: #f43f5e;">Bad</div>
+                  </div>
+                </div>
+                <div class="perf-circle-desc">Relief, Sleep & Maintenance exceeded goals</div>
+              </div>
+              <!-- Neutral Circle -->
+              <div class="perf-circle-card perf-neutral animate-fade-in-scale" style="animation-delay: 200ms">
+                <div class="perf-circle-wrapper">
+                  <svg class="perf-circle-svg" viewBox="0 0 140 140">
+                    <defs>
+                      <linearGradient id="neutralGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#6366f1" />
+                        <stop offset="100%" stop-color="#4f46e5" />
+                      </linearGradient>
+                    </defs>
+                    <circle class="perf-circle-bg" cx="70" cy="70" r="58" />
+                    <circle class="perf-circle-bar" id="perf-neutral-bar" cx="70" cy="70" r="58"
+                      style="stroke: url(#neutralGradient); stroke-dasharray: 364.42; stroke-dashoffset: 364.42;" />
+                  </svg>
+                  <div class="perf-circle-text">
+                    <div class="perf-circle-value" id="perf-neutral-value">0%</div>
+                    <div class="perf-circle-label" style="color: #6366f1;">Neutral</div>
+                  </div>
+                </div>
+                <div class="perf-circle-desc">All categories matched goals</div>
+              </div>
+            </div>
+          </div>
 
-        <!-- Dashboard Stats -->
-        <h2 class="section-title">Today's Overview</h2>
-        <div class="stats-row stagger-children" id="dashboard-stats"></div>
+          <!-- Category Cards -->
+          <h2 class="section-title">Daily Routine</h2>
+          <div class="categories-grid stagger-children" id="categories-grid"></div>
 
-        <!-- Charts -->
-        <h2 class="section-title">Insights</h2>
-        <div class="charts-grid">
-          <div class="chart-card animate-fade-in-up">
-            <div class="chart-card-title">Today's Distribution</div>
-            <div class="chart-wrapper">
-              <canvas id="chart-pie"></canvas>
+          <!-- Dashboard Stats -->
+          <h2 class="section-title">Today's Overview</h2>
+          <div class="stats-row stagger-children" id="dashboard-stats"></div>
+
+          <!-- Charts -->
+          <h2 class="section-title">Insights</h2>
+          <div class="charts-grid">
+            <div class="chart-card animate-fade-in-up">
+              <div class="chart-card-title">Today's Distribution</div>
+              <div class="chart-wrapper">
+                <canvas id="chart-pie"></canvas>
+              </div>
             </div>
-          </div>
-          <div class="chart-card animate-fade-in-up" style="animation-delay: 100ms">
-            <div class="chart-card-title">Goal vs Actual</div>
-            <div class="chart-wrapper">
-              <canvas id="chart-distribution"></canvas>
+            <div class="chart-card animate-fade-in-up" style="animation-delay: 100ms">
+              <div class="chart-card-title">Goal vs Actual</div>
+              <div class="chart-wrapper">
+                <canvas id="chart-distribution"></canvas>
+              </div>
             </div>
-          </div>
-          <div class="chart-card animate-fade-in-up" style="animation-delay: 200ms">
-            <div class="chart-card-title">Weekly Scores</div>
-            <div class="chart-wrapper">
-              <canvas id="chart-bar"></canvas>
+            <div class="chart-card animate-fade-in-up" style="animation-delay: 200ms">
+              <div class="chart-card-title">Weekly Scores</div>
+              <div class="chart-wrapper">
+                <canvas id="chart-bar"></canvas>
+              </div>
             </div>
-          </div>
-          <div class="chart-card animate-fade-in-up" style="animation-delay: 300ms">
-            <div class="chart-card-title">Monthly Trend</div>
-            <div class="chart-wrapper">
-              <canvas id="chart-line"></canvas>
+            <div class="chart-card animate-fade-in-up" style="animation-delay: 300ms">
+              <div class="chart-card-title">Monthly Trend</div>
+              <div class="chart-wrapper">
+                <canvas id="chart-line"></canvas>
+              </div>
             </div>
           </div>
         </div>
@@ -214,30 +291,86 @@
       <!-- ===== WEEKLY VIEW ===== -->
       <section id="view-weekly" class="view-section">
         <div class="page-header">
-          <h1 class="greeting-text">Weekly View 📅</h1>
+          <h1 class="greeting-text">Weekly View <i data-lucide="calendar-days" style="display:inline; width:32px; height:32px; vertical-align:middle;" class="lucide-icon"></i></h1>
           <p class="date-text">Track your progress through the week</p>
         </div>
 
         <div class="week-navigation">
-          <button class="week-nav-btn ripple-container" id="week-prev" aria-label="Previous week">◀</button>
+          <button class="week-nav-btn ripple-container" id="week-prev" aria-label="Previous week">
+            <i data-lucide="chevron-left" style="width:20px;height:20px;" class="lucide-icon"></i>
+          </button>
           <span class="week-title" id="week-title"></span>
-          <button class="week-nav-btn ripple-container" id="week-next" aria-label="Next week">▶</button>
+          <button class="week-nav-btn ripple-container" id="week-next" aria-label="Next week">
+            <i data-lucide="chevron-right" style="width:20px;height:20px;" class="lucide-icon"></i>
+          </button>
         </div>
 
         <div class="weekly-grid stagger-children" id="weekly-grid"></div>
+
+        <!-- Weekly Routine Planner -->
+        <div class="planner-section">
+          <div class="planner-container" id="planner-container">
+            <div class="planner-header">
+              <div class="planner-title">
+                <i data-lucide="list-checks" style="width:22px;height:22px;" class="lucide-icon"></i>
+                Today's Routine Planner
+              </div>
+              <button class="planner-add-btn btn-press" id="planner-add-btn">
+                <i data-lucide="plus" style="width:16px;height:16px;" class="lucide-icon"></i> Add Task
+              </button>
+            </div>
+            <div class="planner-table-header">
+              <span>Task</span>
+              <span>Time</span>
+              <span>Status</span>
+              <span></span>
+            </div>
+            <div id="planner-tasks-list">
+              <!-- Rendered by planner.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Daily Logs -->
+        <div class="logs-section">
+          <div class="planner-container" id="logs-container">
+            <div class="planner-header">
+              <div class="planner-title">
+                <i data-lucide="notebook-pen" style="width:22px;height:22px;" class="lucide-icon"></i>
+                Daily Log
+              </div>
+              <button class="planner-add-btn btn-press" id="log-add-btn">
+                <i data-lucide="plus" style="width:16px;height:16px;" class="lucide-icon"></i> Add Entry
+              </button>
+            </div>
+            <div class="planner-table-header">
+              <span>Task / Note</span>
+              <span>Time</span>
+              <span>Status</span>
+              <span></span>
+            </div>
+            <div id="logs-entries-list">
+              <!-- Rendered by planner.js -->
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- ===== MONTHLY VIEW ===== -->
       <section id="view-monthly" class="view-section">
         <div class="page-header">
-          <h1 class="greeting-text">Monthly Calendar 🗓</h1>
+          <h1 class="greeting-text">Monthly Calendar <i data-lucide="calendar" style="display:inline; width:32px; height:32px; vertical-align:middle;" class="lucide-icon"></i></h1>
           <p class="date-text">Your life balance at a glance</p>
         </div>
 
         <div class="calendar-header">
-          <button class="calendar-nav-btn ripple-container" id="month-prev" aria-label="Previous month">◀</button>
+          <button class="calendar-nav-btn ripple-container" id="month-prev" aria-label="Previous month">
+            <i data-lucide="chevron-left" style="width:18px;height:18px;" class="lucide-icon"></i>
+          </button>
           <span class="calendar-title" id="calendar-title"></span>
-          <button class="calendar-nav-btn ripple-container" id="month-next" aria-label="Next month">▶</button>
+          <button class="calendar-nav-btn ripple-container" id="month-next" aria-label="Next month">
+            <i data-lucide="chevron-right" style="width:18px;height:18px;" class="lucide-icon"></i>
+          </button>
         </div>
 
         <div class="glass-card" style="padding: var(--space-xl);">
@@ -267,7 +400,7 @@
       <!-- ===== STATISTICS VIEW ===== -->
       <section id="view-stats" class="view-section">
         <div class="page-header">
-          <h1 class="greeting-text">Statistics 📈</h1>
+          <h1 class="greeting-text">Statistics <i data-lucide="trending-up" style="display:inline; width:32px; height:32px; vertical-align:middle;" class="lucide-icon"></i></h1>
           <p class="date-text">Your all-time performance overview</p>
         </div>
 
@@ -277,7 +410,7 @@
       <!-- ===== ANALYTICS VIEW ===== -->
       <section id="view-analytics" class="view-section">
         <div class="page-header">
-          <h1 class="greeting-text">Analytics 🔬</h1>
+          <h1 class="greeting-text">Analytics <i data-lucide="bar-chart-3" style="display:inline; width:32px; height:32px; vertical-align:middle;" class="lucide-icon"></i></h1>
           <p class="date-text">Deep dive into your performance trends</p>
         </div>
 
@@ -335,7 +468,7 @@
       <!-- ===== ACHIEVEMENTS VIEW ===== -->
       <section id="view-achievements" class="view-section">
         <div class="page-header">
-          <h1 class="greeting-text">Achievements 🏆</h1>
+          <h1 class="greeting-text">Achievements <i data-lucide="trophy" style="display:inline; width:32px; height:32px; vertical-align:middle;" class="lucide-icon"></i></h1>
           <p class="date-text">Unlock badges by building great habits</p>
         </div>
 
@@ -345,7 +478,7 @@
       <!-- ===== SETTINGS VIEW ===== -->
       <section id="view-settings" class="view-section">
         <div class="page-header">
-          <h1 class="greeting-text">Settings ⚙️</h1>
+          <h1 class="greeting-text">Settings <i data-lucide="settings" style="display:inline; width:32px; height:32px; vertical-align:middle;" class="lucide-icon"></i></h1>
           <p class="date-text">Customize your experience</p>
         </div>
 
@@ -479,7 +612,7 @@
                 <div class="settings-item-icon">⚡</div>
                 <div class="settings-item-text">
                   <h4>LifeOS</h4>
-                  <p>Version 1.0 — Personal Life Balance Dashboard</p>
+                  <p>Version 2.0 — Premium Life Balance Dashboard</p>
                 </div>
               </div>
             </div>
@@ -493,31 +626,31 @@
     <!-- ========== BOTTOM NAV (Mobile) ========== -->
     <nav class="bottom-nav">
       <button class="bottom-nav-item active" data-view="dashboard" aria-label="Dashboard">
-        <span class="nav-icon">📊</span>
+        <span class="nav-icon"><i data-lucide="layout-dashboard" style="width:20px;height:20px;" class="lucide-icon"></i></span>
         <span>Home</span>
       </button>
       <button class="bottom-nav-item" data-view="weekly" aria-label="Weekly">
-        <span class="nav-icon">📅</span>
+        <span class="nav-icon"><i data-lucide="calendar-days" style="width:20px;height:20px;" class="lucide-icon"></i></span>
         <span>Weekly</span>
       </button>
       <button class="bottom-nav-item" data-view="monthly" aria-label="Monthly">
-        <span class="nav-icon">🗓</span>
+        <span class="nav-icon"><i data-lucide="calendar" style="width:20px;height:20px;" class="lucide-icon"></i></span>
         <span>Monthly</span>
       </button>
       <button class="bottom-nav-item" data-view="stats" aria-label="Statistics">
-        <span class="nav-icon">📈</span>
+        <span class="nav-icon"><i data-lucide="trending-up" style="width:20px;height:20px;" class="lucide-icon"></i></span>
         <span>Stats</span>
       </button>
       <button class="bottom-nav-item" data-view="analytics" aria-label="Analytics">
-        <span class="nav-icon">🔬</span>
+        <span class="nav-icon"><i data-lucide="bar-chart-3" style="width:20px;height:20px;" class="lucide-icon"></i></span>
         <span>Analytics</span>
       </button>
       <button class="bottom-nav-item" data-view="achievements" aria-label="Achievements">
-        <span class="nav-icon">🏆</span>
+        <span class="nav-icon"><i data-lucide="trophy" style="width:20px;height:20px;" class="lucide-icon"></i></span>
         <span>Awards</span>
       </button>
       <button class="bottom-nav-item" data-view="settings" aria-label="Settings">
-        <span class="nav-icon">⚙️</span>
+        <span class="nav-icon"><i data-lucide="settings" style="width:20px;height:20px;" class="lucide-icon"></i></span>
         <span>Settings</span>
       </button>
     </nav>
@@ -532,7 +665,10 @@
   <!-- ========== SCRIPTS ========== -->
   <script src="js/storage.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/streak.js"></script>
+  <script src="js/widgets.js"></script>
   <script src="js/dashboard.js"></script>
+  <script src="js/planner.js"></script>
   <script src="js/charts.js"></script>
   <script src="js/calendar.js"></script>
   <script src="js/stats.js"></script>

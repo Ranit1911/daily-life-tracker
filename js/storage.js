@@ -182,13 +182,34 @@ const Storage = (() => {
   /* --- Get All Data (for export) --- */
   function getAllData() {
     return new Promise((resolve) => {
+      const plannerData = {};
+      const dailyLogsData = {};
+      const timelineData = {};
+      
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('lifeos_planner_')) {
+          plannerData[key] = localStorage.getItem(key);
+        } else if (key.startsWith('lifeos_dailylogs_')) {
+          dailyLogsData[key] = localStorage.getItem(key);
+        } else if (key.startsWith('lifeos_timeline_')) {
+          timelineData[key] = localStorage.getItem(key);
+        }
+      });
+
       resolve({
         version: DB_VERSION,
         exportDate: new Date().toISOString(),
         categories: CATEGORIES,
         dailyLogs: Object.values(_getLogs()),
         achievements: Object.values(_getAchievementsRaw()),
-        settings: getSettings()
+        settings: getSettings(),
+        weeklyStreaks: localStorage.getItem('lifeos_weekly_streaks'),
+        lastStreakDay: localStorage.getItem('lifeos_last_streak_day'),
+        lockedCategories: localStorage.getItem('lifeos_locked_categories'),
+        quickNotes: localStorage.getItem('lifeos_quick_notes'),
+        plannerData,
+        dailyLogsData,
+        timelineData
       });
     });
   }
@@ -221,6 +242,35 @@ const Storage = (() => {
         if (data.settings) {
           Object.keys(data.settings).forEach(key => {
             localStorage.setItem(`lifeos_${key}`, JSON.stringify(data.settings[key]));
+          });
+        }
+
+        if (data.weeklyStreaks !== undefined && data.weeklyStreaks !== null) {
+          localStorage.setItem('lifeos_weekly_streaks', data.weeklyStreaks);
+        }
+        if (data.lastStreakDay !== undefined && data.lastStreakDay !== null) {
+          localStorage.setItem('lifeos_last_streak_day', data.lastStreakDay);
+        }
+        if (data.lockedCategories !== undefined && data.lockedCategories !== null) {
+          localStorage.setItem('lifeos_locked_categories', data.lockedCategories);
+        }
+        if (data.quickNotes !== undefined && data.quickNotes !== null) {
+          localStorage.setItem('lifeos_quick_notes', data.quickNotes);
+        }
+
+        if (data.plannerData) {
+          Object.entries(data.plannerData).forEach(([key, val]) => {
+            if (val !== null) localStorage.setItem(key, val);
+          });
+        }
+        if (data.dailyLogsData) {
+          Object.entries(data.dailyLogsData).forEach(([key, val]) => {
+            if (val !== null) localStorage.setItem(key, val);
+          });
+        }
+        if (data.timelineData) {
+          Object.entries(data.timelineData).forEach(([key, val]) => {
+            if (val !== null) localStorage.setItem(key, val);
           });
         }
 
