@@ -146,6 +146,7 @@ const Charts = (() => {
         plugins: {
           legend: {
             position: 'bottom',
+            onClick: null,
             labels: {
               generateLabels: function(chart) {
                 const ds = chart.data.datasets[0];

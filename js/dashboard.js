@@ -195,6 +195,8 @@ const Dashboard = (() => {
       increaseBtn.addEventListener('pointerleave', stopHold);
       increaseBtn.addEventListener('pointercancel', stopHold);
     });
+
+    updateSlidersMax();
   }
 
   /* --- Hold for rapid increment --- */
@@ -220,6 +222,15 @@ const Dashboard = (() => {
   /* --- Update Category --- */
   async function updateCategory(key, value) {
     value = Math.max(0, Math.min(24, Math.round(value * 4) / 4)); // Snap to 0.25
+
+    // Cap total hours at 24 across all categories with strict Number coercion
+    const otherHours = Object.entries(todayData.categories)
+      .filter(([k]) => k !== key)
+      .reduce((sum, [, v]) => sum + Number(v), 0);
+    const maxForThis = Math.max(0, 24 - otherHours);
+    value = Math.min(value, maxForThis);
+    value = Math.round(value * 4) / 4; // Re-snap after capping
+
     todayData.categories[key] = value;
     todayData.score = Storage.calculateScore(todayData.categories);
 
@@ -239,6 +250,9 @@ const Dashboard = (() => {
     if (sliderEl) sliderEl.value = value;
     if (pctEl) pctEl.textContent = App.formatHours(value);
 
+    // Dynamic max hours updates for all sliders
+    updateSlidersMax();
+
     renderCircularProgress();
     renderDashboardStats();
     renderEncouragement();
@@ -246,6 +260,23 @@ const Dashboard = (() => {
     // Save
     await Storage.saveDayData(Storage.getTodayString(), todayData.categories);
     App.emit('dataChanged', todayData);
+  }
+
+  /* --- Update Sliders Max --- */
+  function updateSlidersMax() {
+    if (!todayData || !todayData.categories) return;
+    const categories = todayData.categories;
+    const totalHours = Object.values(categories).reduce((sum, v) => sum + Number(v), 0);
+
+    Object.keys(Storage.CATEGORIES).forEach(key => {
+      const sliderEl = document.getElementById(`slider-${key}`);
+      if (sliderEl) {
+        const currentVal = Number(categories[key]) || 0;
+        const otherHours = totalHours - currentVal;
+        const maxForThis = Math.max(0, 24 - otherHours);
+        sliderEl.max = maxForThis;
+      }
+    });
   }
 
   /* --- Update Category Cards (without re-creating DOM) --- */
@@ -266,11 +297,13 @@ const Dashboard = (() => {
       if (sliderEl) sliderEl.value = currentHours;
       if (pctEl) pctEl.textContent = App.formatHours(currentHours);
     });
+
+    updateSlidersMax();
   }
 
   /* --- Render Dashboard Stats --- */
   function renderDashboardStats() {
-    const totalHours = Object.values(todayData.categories).reduce((s, v) => s + v, 0);
+    const totalHours = Object.values(todayData.categories).reduce((s, v) => s + Number(v), 0);
     const remainingHours = Math.max(0, 24 - totalHours);
     const pctCompleted = Math.round((totalHours / 24) * 100);
 

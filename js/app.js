@@ -146,7 +146,7 @@ const App = (() => {
 
   function handleRoute() {
     const hash = window.location.hash.replace('#', '') || 'dashboard';
-    const validViews = ['dashboard', 'weekly', 'monthly', 'stats', 'achievements', 'settings'];
+    const validViews = ['dashboard', 'weekly', 'monthly', 'stats', 'analytics', 'achievements', 'settings'];
 
     if (!validViews.includes(hash)) {
       navigate('dashboard');
@@ -274,6 +274,7 @@ const App = (() => {
     Charts.init();
     Calendar.init();
     Stats.init();
+    Analytics.init();
     Settings.init();
 
     // Listen for data changes

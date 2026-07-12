@@ -46,6 +46,10 @@
           <span class="nav-item-icon">📈</span>
           <span class="nav-item-label">Statistics</span>
         </button>
+        <button class="nav-item ripple-container" data-view="analytics">
+          <span class="nav-item-icon">🔬</span>
+          <span class="nav-item-label">Analytics</span>
+        </button>
         <button class="nav-item ripple-container" data-view="achievements">
           <span class="nav-item-icon">🏆</span>
           <span class="nav-item-label">Achievements</span>
@@ -96,6 +100,76 @@
             </div>
           </div>
           <p class="encouragement-text" id="encouragement-text"></p>
+        </div>
+
+        <!-- Performance Indicator Circles -->
+        <div class="performance-circles-section">
+          <h2 class="section-title">Performance Indicators</h2>
+          <div class="performance-circles-row" id="performance-circles-row">
+            <!-- Good Circle -->
+            <div class="perf-circle-card perf-good animate-fade-in-scale">
+              <div class="perf-circle-wrapper">
+                <svg class="perf-circle-svg" viewBox="0 0 140 140">
+                  <defs>
+                    <linearGradient id="goodGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#22c55e" />
+                      <stop offset="100%" stop-color="#16a34a" />
+                    </linearGradient>
+                  </defs>
+                  <circle class="perf-circle-bg" cx="70" cy="70" r="58" />
+                  <circle class="perf-circle-bar" id="perf-good-bar" cx="70" cy="70" r="58"
+                    style="stroke: url(#goodGradient); stroke-dasharray: 364.42; stroke-dashoffset: 364.42;" />
+                </svg>
+                <div class="perf-circle-text">
+                  <div class="perf-circle-value" id="perf-good-value">0%</div>
+                  <div class="perf-circle-label" style="color: #22c55e;">Good</div>
+                </div>
+              </div>
+              <div class="perf-circle-desc">Growth & Workout exceeded goals</div>
+            </div>
+            <!-- Bad Circle -->
+            <div class="perf-circle-card perf-bad animate-fade-in-scale" style="animation-delay: 100ms">
+              <div class="perf-circle-wrapper">
+                <svg class="perf-circle-svg" viewBox="0 0 140 140">
+                  <defs>
+                    <linearGradient id="badGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#ef4444" />
+                      <stop offset="100%" stop-color="#dc2626" />
+                    </linearGradient>
+                  </defs>
+                  <circle class="perf-circle-bg" cx="70" cy="70" r="58" />
+                  <circle class="perf-circle-bar" id="perf-bad-bar" cx="70" cy="70" r="58"
+                    style="stroke: url(#badGradient); stroke-dasharray: 364.42; stroke-dashoffset: 364.42;" />
+                </svg>
+                <div class="perf-circle-text">
+                  <div class="perf-circle-value" id="perf-bad-value">0%</div>
+                  <div class="perf-circle-label" style="color: #ef4444;">Bad</div>
+                </div>
+              </div>
+              <div class="perf-circle-desc">Relief, Sleep & Maintenance exceeded goals</div>
+            </div>
+            <!-- Neutral Circle -->
+            <div class="perf-circle-card perf-neutral animate-fade-in-scale" style="animation-delay: 200ms">
+              <div class="perf-circle-wrapper">
+                <svg class="perf-circle-svg" viewBox="0 0 140 140">
+                  <defs>
+                    <linearGradient id="neutralGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#3b82f6" />
+                      <stop offset="100%" stop-color="#2563eb" />
+                    </linearGradient>
+                  </defs>
+                  <circle class="perf-circle-bg" cx="70" cy="70" r="58" />
+                  <circle class="perf-circle-bar" id="perf-neutral-bar" cx="70" cy="70" r="58"
+                    style="stroke: url(#neutralGradient); stroke-dasharray: 364.42; stroke-dashoffset: 364.42;" />
+                </svg>
+                <div class="perf-circle-text">
+                  <div class="perf-circle-value" id="perf-neutral-value">0%</div>
+                  <div class="perf-circle-label" style="color: #3b82f6;">Neutral</div>
+                </div>
+              </div>
+              <div class="perf-circle-desc">All categories matched goals</div>
+            </div>
+          </div>
         </div>
 
         <!-- Category Cards -->
@@ -198,6 +272,64 @@
         </div>
 
         <div class="stats-grid stagger-children" id="stats-grid"></div>
+      </section>
+
+      <!-- ===== ANALYTICS VIEW ===== -->
+      <section id="view-analytics" class="view-section">
+        <div class="page-header">
+          <h1 class="greeting-text">Analytics 🔬</h1>
+          <p class="date-text">Deep dive into your performance trends</p>
+        </div>
+
+        <!-- Individual Subject Charts -->
+        <h2 class="section-title">Individual Category Trends</h2>
+        <p class="section-subtitle">Hours tracked per day for each category</p>
+        <div class="analytics-charts-grid stagger-children" id="analytics-individual-grid">
+          <div class="chart-card animate-fade-in-up">
+            <div class="chart-card-title">🌱 Growth</div>
+            <div class="chart-wrapper"><canvas id="analytics-chart-growth"></canvas></div>
+          </div>
+          <div class="chart-card animate-fade-in-up" style="animation-delay: 50ms">
+            <div class="chart-card-title">😴 Sleep</div>
+            <div class="chart-wrapper"><canvas id="analytics-chart-sleep"></canvas></div>
+          </div>
+          <div class="chart-card animate-fade-in-up" style="animation-delay: 100ms">
+            <div class="chart-card-title">🍽 Maintenance</div>
+            <div class="chart-wrapper"><canvas id="analytics-chart-maintenance"></canvas></div>
+          </div>
+          <div class="chart-card animate-fade-in-up" style="animation-delay: 150ms">
+            <div class="chart-card-title">💪 Workout</div>
+            <div class="chart-wrapper"><canvas id="analytics-chart-workout"></canvas></div>
+          </div>
+          <div class="chart-card animate-fade-in-up" style="animation-delay: 200ms">
+            <div class="chart-card-title">🎮 Relief</div>
+            <div class="chart-wrapper"><canvas id="analytics-chart-relief"></canvas></div>
+          </div>
+          <div class="chart-card animate-fade-in-up" style="animation-delay: 250ms">
+            <div class="chart-card-title">📦 Storage</div>
+            <div class="chart-wrapper"><canvas id="analytics-chart-storage"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Combined All-Subjects Chart -->
+        <h2 class="section-title">Combined Overview</h2>
+        <p class="section-subtitle">All categories plotted together</p>
+        <div class="analytics-combined-chart">
+          <div class="chart-card chart-card-wide animate-fade-in-up">
+            <div class="chart-card-title">All Categories Combined</div>
+            <div class="chart-wrapper chart-wrapper-wide"><canvas id="analytics-chart-combined"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Good / Bad / Neutral Trend Chart -->
+        <h2 class="section-title">Performance Trend</h2>
+        <p class="section-subtitle">Good, Bad & Neutral classification over time</p>
+        <div class="analytics-combined-chart">
+          <div class="chart-card chart-card-wide animate-fade-in-up">
+            <div class="chart-card-title">Good vs Bad vs Neutral Trend</div>
+            <div class="chart-wrapper chart-wrapper-wide"><canvas id="analytics-chart-gbn"></canvas></div>
+          </div>
+        </div>
       </section>
 
       <!-- ===== ACHIEVEMENTS VIEW ===== -->
@@ -376,6 +508,10 @@
         <span class="nav-icon">📈</span>
         <span>Stats</span>
       </button>
+      <button class="bottom-nav-item" data-view="analytics" aria-label="Analytics">
+        <span class="nav-icon">🔬</span>
+        <span>Analytics</span>
+      </button>
       <button class="bottom-nav-item" data-view="achievements" aria-label="Achievements">
         <span class="nav-icon">🏆</span>
         <span>Awards</span>
@@ -400,6 +536,7 @@
   <script src="js/charts.js"></script>
   <script src="js/calendar.js"></script>
   <script src="js/stats.js"></script>
+  <script src="js/analytics.js"></script>
   <script src="js/settings.js"></script>
 </body>
 </html>

@@ -1200,6 +1200,126 @@ body::before {
 }
 
 /* ============================================
+   PERFORMANCE INDICATOR CIRCLES
+   ============================================ */
+.performance-circles-section {
+  margin-bottom: var(--space-2xl);
+}
+.performance-circles-row {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-xl);
+  flex-wrap: wrap;
+}
+.perf-circle-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg) var(--space-xl);
+  transition: all var(--transition-base);
+  min-width: 200px;
+  position: relative;
+  overflow: hidden;
+}
+.perf-circle-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: var(--radius-pill);
+}
+.perf-circle-card.perf-good::before {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+}
+.perf-circle-card.perf-bad::before {
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+}
+.perf-circle-card.perf-neutral::before {
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+}
+.perf-circle-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-color-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+.perf-circle-wrapper {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin-bottom: var(--space-sm);
+}
+.perf-circle-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.perf-circle-bg {
+  fill: none;
+  stroke: var(--border-color);
+  stroke-width: 7;
+}
+.perf-circle-bar {
+  fill: none;
+  stroke-width: 7;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.perf-circle-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.perf-circle-value {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-extrabold);
+  color: var(--text-primary);
+  line-height: 1;
+}
+.perf-circle-label {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  margin-top: 2px;
+}
+.perf-circle-desc {
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+  text-align: center;
+  max-width: 160px;
+  line-height: 1.4;
+}
+
+/* ============================================
+   ANALYTICS PAGE
+   ============================================ */
+.analytics-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-lg);
+  margin-bottom: var(--space-2xl);
+}
+.analytics-combined-chart {
+  margin-bottom: var(--space-2xl);
+}
+.chart-card-wide {
+  width: 100%;
+}
+.chart-wrapper-wide {
+  aspect-ratio: 21 / 9;
+}
+
+/* ============================================
    RESPONSIVE
    ============================================ */
 @media (max-width: 1024px) {
@@ -1220,6 +1340,12 @@ body::before {
   .charts-grid {
     grid-template-columns: 1fr;
   }
+  .analytics-charts-grid {
+    grid-template-columns: 1fr;
+  }
+  .chart-wrapper-wide {
+    aspect-ratio: 16 / 9;
+  }
   .weekly-grid {
     grid-template-columns: repeat(7, 1fr);
     gap: var(--space-xs);
@@ -1239,6 +1365,17 @@ body::before {
   }
   .categories-grid {
     grid-template-columns: 1fr;
+  }
+  .performance-circles-row {
+    gap: var(--space-md);
+  }
+  .perf-circle-card {
+    min-width: 160px;
+    padding: var(--space-md);
+  }
+  .perf-circle-wrapper {
+    width: 110px;
+    height: 110px;
   }
   .stats-row {
     grid-template-columns: repeat(2, 1fr);
