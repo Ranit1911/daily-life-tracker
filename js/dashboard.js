@@ -46,7 +46,15 @@ const Dashboard = (() => {
     const dateEl = document.getElementById('date-text');
     const quoteEl = document.getElementById('quote-text');
 
-    if (greetingEl) greetingEl.textContent = `${greeting.text} ${greeting.emoji}`;
+    if (greetingEl) {
+      const greetingIcons = {
+        '☀️': 'sun',
+        '🌤': 'cloud-sun',
+        '🌙': 'moon'
+      };
+      const iconName = greetingIcons[greeting.emoji] || 'sun';
+      greetingEl.innerHTML = `${greeting.text} <i data-lucide="${iconName}" style="display: inline-block; width: 28px; height: 28px; vertical-align: text-bottom; margin-left: 6px;"></i>`;
+    }
     if (dateEl) dateEl.textContent = App.getFormattedDate();
     if (quoteEl) quoteEl.textContent = `"${App.getDailyQuote()}"`;
   }
@@ -121,6 +129,15 @@ const Dashboard = (() => {
     requestAnimationFrame(tick);
   }
 
+  const CATEGORY_ICONS = {
+    growth: 'sprout',
+    sleep: 'moon-star',
+    maintenance: 'utensils',
+    workout: 'dumbbell',
+    relief: 'gamepad-2',
+    storage: 'package'
+  };
+
   /* --- Render Category Cards --- */
   function renderCategoryCards() {
     const grid = document.getElementById('categories-grid');
@@ -140,7 +157,9 @@ const Dashboard = (() => {
       card.innerHTML = `
         <div class="category-header">
           <div class="category-info">
-            <div class="category-icon">${cat.icon}</div>
+            <div class="premium-icon-container ${key}">
+              <i data-lucide="${CATEGORY_ICONS[key]}"></i>
+            </div>
             <div>
               <div class="category-name">${cat.name}</div>
               <span class="daily-change neutral" id="change-${key}">
@@ -340,16 +359,32 @@ const Dashboard = (() => {
       { icon: '💤', value: leastActive || '—', label: "Least Active" }
     ];
 
+    const OVERVIEW_ICONS = {
+      "Today's Score": 'target',
+      "Hours Completed": 'clock',
+      "Hours Remaining": 'hourglass',
+      "Day Completed": 'check-circle-2',
+      "Most Active": 'zap',
+      "Least Active": 'moon'
+    };
+
     const container = document.getElementById('dashboard-stats');
     if (!container) return;
 
-    container.innerHTML = statsData.map(stat => `
-      <div class="stat-card card-elevate">
-        <div class="stat-card-icon">${stat.icon}</div>
-        <div class="stat-card-value">${stat.value}</div>
-        <div class="stat-card-label">${stat.label}</div>
-      </div>
-    `).join('');
+    container.innerHTML = statsData.map(stat => {
+      const iconName = OVERVIEW_ICONS[stat.label] || 'activity';
+      return `
+        <div class="stat-card card-elevate">
+          <div style="display: flex; justify-content: center; margin-bottom: var(--space-xs);">
+            <div class="dashboard-icon-container">
+              <i data-lucide="${iconName}"></i>
+            </div>
+          </div>
+          <div class="stat-card-value">${stat.value}</div>
+          <div class="stat-card-label">${stat.label}</div>
+        </div>
+      `;
+    }).join('');
   }
 
   /* --- Render Encouragement --- */

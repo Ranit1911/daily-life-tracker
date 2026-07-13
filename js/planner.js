@@ -11,9 +11,9 @@ const Planner = (() => {
   };
 
   const STATUS_LABELS = {
-    [STATUS.PENDING]: { text: 'Pending', icon: '○' },
-    [STATUS.COMPLETED]: { text: 'Done', icon: '✔' },
-    [STATUS.NOT_COMPLETED]: { text: 'Missed', icon: '✖' }
+    [STATUS.PENDING]: { text: 'Pending', icon: '<i data-lucide="circle" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>' },
+    [STATUS.COMPLETED]: { text: 'Done', icon: '<i data-lucide="check" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>' },
+    [STATUS.NOT_COMPLETED]: { text: 'Missed', icon: '<i data-lucide="x" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>' }
   };
 
   const STATUS_CYCLE = [STATUS.PENDING, STATUS.COMPLETED, STATUS.NOT_COMPLETED];

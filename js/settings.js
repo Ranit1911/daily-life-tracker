@@ -130,6 +130,15 @@ const Settings = (() => {
     if (!container) return;
     container.innerHTML = '';
 
+    const CATEGORY_ICONS = {
+      growth: 'sprout',
+      sleep: 'moon-star',
+      maintenance: 'utensils',
+      workout: 'dumbbell',
+      relief: 'gamepad-2',
+      storage: 'package'
+    };
+
     const categories = Storage.CATEGORIES;
     Object.keys(categories).forEach(key => {
       const cat = categories[key];
@@ -138,18 +147,24 @@ const Settings = (() => {
       item.style.marginBottom = '0.5rem';
       item.innerHTML = `
         <div class="settings-item-info">
-          <div class="settings-item-icon">${cat.icon}</div>
+          <div class="settings-item-icon">
+            <i data-lucide="${CATEGORY_ICONS[key]}"></i>
+          </div>
           <div class="settings-item-text">
             <h4>${cat.name}</h4>
           </div>
         </div>
         <div style="display: flex; align-items: center; gap: 0.5rem;">
-          <input type="number" id="goal-input-${key}" class="goal-input" value="${cat.goalHours}" min="0" max="24" step="0.25" style="width: 70px; padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-color); font-size: 1rem;">
-          <span style="color: var(--text-secondary);">hours</span>
+          <input type="number" id="goal-input-${key}" class="goal-input" value="${cat.goalHours}" min="0" max="24" step="0.25" style="width: 60px; padding: var(--space-2xs) var(--space-xs); border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-primary); font-size: var(--fs-sm); outline: none;">
+          <span style="color: var(--text-secondary); font-size: var(--fs-sm);">hours</span>
         </div>
       `;
       container.appendChild(item);
     });
+
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
   }
 
   function setupGoalsConfig() {
@@ -314,7 +329,10 @@ const Settings = (() => {
       const modal = overlay.querySelector('.modal');
 
       modal.innerHTML = `
-        <div class="modal-title">⚠️ Reset All Data</div>
+        <div class="modal-title" style="display: flex; align-items: center; gap: var(--space-xs); justify-content: center;">
+          <i data-lucide="alert-triangle" style="width: 22px; height: 22px; color: var(--danger);"></i>
+          Reset All Data
+        </div>
         <div class="modal-body">
           <p style="color: var(--text-secondary); margin-bottom: var(--space-md);">
             This will permanently delete all your tracked data, achievements, and settings. This action cannot be undone.
@@ -330,6 +348,10 @@ const Settings = (() => {
       `;
 
       overlay.classList.add('active');
+
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
 
       document.getElementById('reset-cancel').addEventListener('click', () => {
         overlay.classList.remove('active');

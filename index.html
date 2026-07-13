@@ -29,7 +29,7 @@
     <!-- ========== SIDEBAR (Desktop) ========== -->
     <aside class="sidebar">
       <a class="sidebar-logo" href="#dashboard">
-        <div class="sidebar-logo-icon">⚡</div>
+        <div class="sidebar-logo-icon"><i data-lucide="zap" style="width:20px;height:20px;"></i></div>
         <div class="sidebar-logo-text">Life<span>OS</span></div>
       </a>
 
@@ -46,12 +46,12 @@
           <span class="nav-item-icon"><i data-lucide="calendar" class="lucide-icon"></i></span>
           <span class="nav-item-label">Monthly</span>
         </button>
-        <button class="nav-item ripple-container" data-view="stats">
+         <button class="nav-item ripple-container" data-view="stats">
           <span class="nav-item-icon"><i data-lucide="trending-up" class="lucide-icon"></i></span>
           <span class="nav-item-label">Statistics</span>
         </button>
         <button class="nav-item ripple-container" data-view="analytics">
-          <span class="nav-item-icon"><i data-lucide="bar-chart-3" class="lucide-icon"></i></span>
+          <span class="nav-item-icon"><i data-lucide="line-chart" class="lucide-icon"></i></span>
           <span class="nav-item-label">Analytics</span>
         </button>
         <button class="nav-item ripple-container" data-view="achievements">
@@ -374,7 +374,9 @@
         </div>
 
         <div class="glass-card" style="padding: var(--space-xl);">
-          <div class="calendar-grid" id="calendar-grid"></div>
+          <div class="calendar-grid-wrapper">
+            <div class="calendar-grid" id="calendar-grid"></div>
+          </div>
         </div>
 
         <div class="calendar-legend" style="margin-top: var(--space-lg);">
@@ -410,7 +412,7 @@
       <!-- ===== ANALYTICS VIEW ===== -->
       <section id="view-analytics" class="view-section">
         <div class="page-header">
-          <h1 class="greeting-text">Analytics <i data-lucide="bar-chart-3" style="display:inline; width:32px; height:32px; vertical-align:middle;" class="lucide-icon"></i></h1>
+          <h1 class="greeting-text">Analytics <i data-lucide="line-chart" style="display:inline; width:32px; height:32px; vertical-align:middle;" class="lucide-icon"></i></h1>
           <p class="date-text">Deep dive into your performance trends</p>
         </div>
 
@@ -419,27 +421,27 @@
         <p class="section-subtitle">Hours tracked per day for each category</p>
         <div class="analytics-charts-grid stagger-children" id="analytics-individual-grid">
           <div class="chart-card animate-fade-in-up">
-            <div class="chart-card-title">🌱 Growth</div>
+            <div class="chart-card-title"><i data-lucide="sprout" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;" class="lucide-icon"></i>Growth</div>
             <div class="chart-wrapper"><canvas id="analytics-chart-growth"></canvas></div>
           </div>
           <div class="chart-card animate-fade-in-up" style="animation-delay: 50ms">
-            <div class="chart-card-title">😴 Sleep</div>
+            <div class="chart-card-title"><i data-lucide="moon-star" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;" class="lucide-icon"></i>Sleep</div>
             <div class="chart-wrapper"><canvas id="analytics-chart-sleep"></canvas></div>
           </div>
           <div class="chart-card animate-fade-in-up" style="animation-delay: 100ms">
-            <div class="chart-card-title">🍽 Maintenance</div>
+            <div class="chart-card-title"><i data-lucide="utensils" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;" class="lucide-icon"></i>Maintenance</div>
             <div class="chart-wrapper"><canvas id="analytics-chart-maintenance"></canvas></div>
           </div>
           <div class="chart-card animate-fade-in-up" style="animation-delay: 150ms">
-            <div class="chart-card-title">💪 Workout</div>
+            <div class="chart-card-title"><i data-lucide="dumbbell" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;" class="lucide-icon"></i>Workout</div>
             <div class="chart-wrapper"><canvas id="analytics-chart-workout"></canvas></div>
           </div>
           <div class="chart-card animate-fade-in-up" style="animation-delay: 200ms">
-            <div class="chart-card-title">🎮 Relief</div>
+            <div class="chart-card-title"><i data-lucide="gamepad-2" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;" class="lucide-icon"></i>Relief</div>
             <div class="chart-wrapper"><canvas id="analytics-chart-relief"></canvas></div>
           </div>
           <div class="chart-card animate-fade-in-up" style="animation-delay: 250ms">
-            <div class="chart-card-title">📦 Storage</div>
+            <div class="chart-card-title"><i data-lucide="package" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;" class="lucide-icon"></i>Storage</div>
             <div class="chart-wrapper"><canvas id="analytics-chart-storage"></canvas></div>
           </div>
         </div>
@@ -472,7 +474,20 @@
           <p class="date-text">Unlock badges by building great habits</p>
         </div>
 
-        <div class="achievements-grid stagger-children" id="achievements-grid"></div>
+        <!-- Achievements Top Summary Panel -->
+        <div class="ach-summary-row" id="achievements-summary"></div>
+
+        <!-- Achievements Tab Navigation -->
+        <div class="ach-tabs-nav">
+          <button class="ach-tab-btn active" data-tab="all">All</button>
+          <button class="ach-tab-btn" data-tab="daily">Daily</button>
+          <button class="ach-tab-btn" data-tab="weekly">Weekly</button>
+          <button class="ach-tab-btn" data-tab="monthly">Monthly</button>
+          <button class="ach-tab-btn" data-tab="lifetime">Lifetime</button>
+        </div>
+
+        <!-- Responsive 2-column Achievements Grid -->
+        <div class="ach-cards-grid" id="achievements-grid"></div>
       </section>
 
       <!-- ===== SETTINGS VIEW ===== -->
@@ -488,7 +503,7 @@
           <div class="settings-card">
             <div class="settings-item">
               <div class="settings-item-info">
-                <div class="settings-item-icon">🌙</div>
+                <div class="settings-item-icon"><i data-lucide="moon"></i></div>
                 <div class="settings-item-text">
                   <h4>Dark Mode</h4>
                   <p>Toggle dark and light theme</p>
@@ -498,7 +513,7 @@
             </div>
             <div class="settings-item">
               <div class="settings-item-info">
-                <div class="settings-item-icon">🎨</div>
+                <div class="settings-item-icon"><i data-lucide="palette"></i></div>
                 <div class="settings-item-text">
                   <h4>Accent Color</h4>
                   <p>Choose your preferred accent color</p>
@@ -522,7 +537,7 @@
           <div class="settings-card">
             <div class="settings-item">
               <div class="settings-item-info">
-                <div class="settings-item-icon">✨</div>
+                <div class="settings-item-icon"><i data-lucide="sparkles"></i></div>
                 <div class="settings-item-text">
                   <h4>Animations</h4>
                   <p>Enable or disable UI animations</p>
@@ -532,7 +547,7 @@
             </div>
             <div class="settings-item">
               <div class="settings-item-info">
-                <div class="settings-item-icon">🔔</div>
+                <div class="settings-item-icon"><i data-lucide="bell"></i></div>
                 <div class="settings-item-text">
                   <h4>Notifications</h4>
                   <p>Enable or disable toast notifications</p>
@@ -562,7 +577,7 @@
           <div class="settings-card">
             <div class="settings-item">
               <div class="settings-item-info">
-                <div class="settings-item-icon">💾</div>
+                <div class="settings-item-icon"><i data-lucide="download"></i></div>
                 <div class="settings-item-text">
                   <h4>Export Data (JSON)</h4>
                   <p>Download all your data as a JSON file</p>
@@ -572,7 +587,7 @@
             </div>
             <div class="settings-item">
               <div class="settings-item-info">
-                <div class="settings-item-icon">📄</div>
+                <div class="settings-item-icon"><i data-lucide="file-text"></i></div>
                 <div class="settings-item-text">
                   <h4>Export Data (PDF)</h4>
                   <p>Download a printable PDF report</p>
@@ -582,7 +597,7 @@
             </div>
             <div class="settings-item">
               <div class="settings-item-info">
-                <div class="settings-item-icon">📥</div>
+                <div class="settings-item-icon"><i data-lucide="upload"></i></div>
                 <div class="settings-item-text">
                   <h4>Import Data</h4>
                   <p>Restore from a JSON backup file</p>
@@ -592,7 +607,7 @@
             </div>
             <div class="settings-item">
               <div class="settings-item-info">
-                <div class="settings-item-icon">🗑️</div>
+                <div class="settings-item-icon"><i data-lucide="trash-2"></i></div>
                 <div class="settings-item-text">
                   <h4>Reset All Data</h4>
                   <p>Permanently delete all data and settings</p>
@@ -609,7 +624,7 @@
           <div class="settings-card">
             <div class="settings-item">
               <div class="settings-item-info">
-                <div class="settings-item-icon">⚡</div>
+                <div class="settings-item-icon"><i data-lucide="info"></i></div>
                 <div class="settings-item-text">
                   <h4>LifeOS</h4>
                   <p>Version 2.0 — Premium Life Balance Dashboard</p>
@@ -642,7 +657,7 @@
         <span>Stats</span>
       </button>
       <button class="bottom-nav-item" data-view="analytics" aria-label="Analytics">
-        <span class="nav-icon"><i data-lucide="bar-chart-3" style="width:20px;height:20px;" class="lucide-icon"></i></span>
+        <span class="nav-icon"><i data-lucide="line-chart" style="width:20px;height:20px;" class="lucide-icon"></i></span>
         <span>Analytics</span>
       </button>
       <button class="bottom-nav-item" data-view="achievements" aria-label="Achievements">
@@ -671,7 +686,7 @@
   <script src="js/planner.js"></script>
   <script src="js/charts.js"></script>
   <script src="js/calendar.js"></script>
-  <script src="js/stats.js"></script>
+  <script src="js/stats.js?v=2"></script>
   <script src="js/analytics.js"></script>
   <script src="js/settings.js"></script>
 </body>

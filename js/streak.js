@@ -140,7 +140,7 @@ const Streak = (() => {
       if (totalStreak === 0) {
         subtitleEl.textContent = 'Start logging to build your streak!';
       } else if (cycleDay === 7) {
-        subtitleEl.textContent = '🎉 Week complete! Keep going!';
+        subtitleEl.textContent = 'Week complete! Keep going!';
       } else {
         subtitleEl.textContent = `${7 - cycleDay} more day${7 - cycleDay !== 1 ? 's' : ''} to complete this week`;
       }
@@ -164,7 +164,7 @@ const Streak = (() => {
     if (completedWeeks > 0) {
       container.innerHTML = `
         <div class="weekly-badge">
-          <span class="weekly-badge-icon">🏆</span>
+          <span class="weekly-badge-icon" style="display: flex; align-items: center;"><i data-lucide="trophy" style="width: 18px; height: 18px; color: var(--warning);"></i></span>
           <div>
             <div class="weekly-badge-count">${completedWeeks}</div>
             <div class="weekly-badge-text">Weekly Streak${completedWeeks !== 1 ? 's' : ''}</div>
@@ -174,7 +174,7 @@ const Streak = (() => {
     } else {
       container.innerHTML = `
         <div class="weekly-badge" style="opacity: 0.5; animation: none;">
-          <span class="weekly-badge-icon">🔒</span>
+          <span class="weekly-badge-icon" style="display: flex; align-items: center;"><i data-lucide="lock" style="width: 18px; height: 18px; color: var(--text-tertiary);"></i></span>
           <div>
             <div class="weekly-badge-count">0</div>
             <div class="weekly-badge-text">Weekly Streaks</div>

@@ -141,6 +141,19 @@ const Calendar = (() => {
     const daysInMonth = monthData.length;
     const todayStr = Storage.getTodayString();
 
+    // Determine user's first logged day with active data
+    const allData = await Storage.getAllData();
+    const activeLogs = (allData.dailyLogs || []).filter(l => {
+      const total = Object.values(l.categories).reduce((s, v) => s + Number(v), 0);
+      return total > 0;
+    });
+
+    let firstLoggedDateStr = null;
+    if (activeLogs.length > 0) {
+      activeLogs.sort((a, b) => a.date.localeCompare(b.date));
+      firstLoggedDateStr = activeLogs[0].date;
+    }
+
     grid.innerHTML = '';
 
     // Day headers
@@ -163,24 +176,34 @@ const Calendar = (() => {
       const dateNum = index + 1;
       const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(dateNum).padStart(2, '0')}`;
       const isToday = dateStr === todayStr;
-      const totalHours = Object.values(day.categories).reduce((s, v) => s + v, 0);
-      const hasData = totalHours > 0;
 
-      let dotClass = 'nodata';
-      if (hasData) {
-        if (day.score >= 80) dotClass = 'excellent';
-        else if (day.score >= 50) dotClass = 'average';
-        else dotClass = 'poor';
-      }
+      const isBeforeFirstLog = firstLoggedDateStr && dateStr < firstLoggedDateStr;
 
       const cell = document.createElement('div');
-      cell.className = `calendar-day ${isToday ? 'today' : ''}`;
-      cell.innerHTML = `
-        <span>${dateNum}</span>
-        <div class="day-dot ${dotClass}"></div>
-      `;
+      
+      if (isBeforeFirstLog) {
+        cell.className = `calendar-day empty-day before-first-log`;
+        cell.innerHTML = `<span>${dateNum}</span>`;
+      } else {
+        const totalHours = Object.values(day.categories).reduce((s, v) => s + Number(v), 0);
+        const hasData = totalHours > 0;
 
-      cell.addEventListener('click', () => showDayDetail(dateStr, day));
+        let dotClass = 'nodata';
+        if (hasData) {
+          if (day.score >= 80) dotClass = 'excellent';
+          else if (day.score >= 50) dotClass = 'average';
+          else dotClass = 'poor';
+        }
+
+        cell.className = `calendar-day ${isToday ? 'today' : ''}`;
+        cell.innerHTML = `
+          <span>${dateNum}</span>
+          <div class="day-dot ${dotClass}"></div>
+        `;
+
+        cell.addEventListener('click', () => showDayDetail(dateStr, day));
+      }
+      
       grid.appendChild(cell);
     });
   }
@@ -212,13 +235,27 @@ const Calendar = (() => {
     });
 
     let detailItems = '';
+    const categoryIcons = {
+      growth: 'sprout',
+      sleep: 'moon-star',
+      maintenance: 'utensils',
+      workout: 'dumbbell',
+      relief: 'gamepad-2',
+      storage: 'package'
+    };
+
     Object.entries(Storage.CATEGORIES).forEach(([key, cat]) => {
       const hours = dayData.categories[key] || 0;
       const progress = Math.min(Math.round((hours / cat.goalHours) * 100), 100);
+      const iconName = categoryIcons[key] || 'activity';
+      
       detailItems += `
-        <li class="modal-detail-item">
-          <span class="modal-detail-label">${cat.icon} ${cat.name}</span>
-          <span class="modal-detail-value">${App.formatHours(hours)} / ${App.formatHours(cat.goalHours)} (${progress}%)</span>
+        <li class="modal-detail-item" style="display: flex; align-items: center; justify-content: space-between; padding: var(--space-xs) 0; border-bottom: 1px solid var(--border-color);">
+          <span class="modal-detail-label" style="display: flex; align-items: center; gap: var(--space-xs);">
+            <i data-lucide="${iconName}" style="width: 16px; height: 16px; color: var(--color-${key}); display: inline-block;"></i>
+            ${cat.name}
+          </span>
+          <span class="modal-detail-value" style="font-weight: 600; color: var(--text-primary);">${App.formatHours(hours)} / ${App.formatHours(cat.goalHours)} (${progress}%)</span>
         </li>
       `;
     });
@@ -246,6 +283,10 @@ const Calendar = (() => {
     `;
 
     overlay.classList.add('active');
+
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
 
     document.getElementById('modal-close-btn').addEventListener('click', () => {
       overlay.classList.remove('active');

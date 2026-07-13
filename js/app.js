@@ -85,30 +85,30 @@ const App = (() => {
   /* --- Encouragement Messages --- */
   const ENCOURAGEMENTS = {
     excellent: [
-      "Amazing work today! 🌟",
-      "You're crushing it! Keep this energy! 💪",
-      "Outstanding balance! You're a legend! 🏆",
-      "Perfect harmony achieved! Incredible! ✨"
+      "Amazing work today!",
+      "You're crushing it! Keep this energy!",
+      "Outstanding balance! You're a legend!",
+      "Perfect harmony achieved! Incredible!"
     ],
     great: [
-      "Great job! You're almost at your goal! 🎯",
-      "Impressive progress today! Keep going! 🚀",
-      "You're doing fantastic! Nearly there! 💫"
+      "Great job! You're almost at your goal!",
+      "Impressive progress today! Keep going!",
+      "You're doing fantastic! Nearly there!"
     ],
     good: [
-      "Good progress! You're on the right track! 👍",
-      "Solid effort today! Keep building momentum! 💪",
-      "You're making it happen! Stay focused! 🔥"
+      "Good progress! You're on the right track!",
+      "Solid effort today! Keep building momentum!",
+      "You're making it happen! Stay focused!"
     ],
     fair: [
-      "You're close to today's goal. Keep pushing! 💪",
-      "Every step counts. You've got this! 🌱",
-      "Room to grow — let's finish strong! 🎯"
+      "You're close to today's goal. Keep pushing!",
+      "Every step counts. You've got this!",
+      "Room to grow — let's finish strong!"
     ],
     poor: [
-      "Every journey starts with a single step. Start now! 🌟",
-      "It's never too late to make today count! ⏰",
-      "Small progress is still progress. Let's go! 🚀"
+      "Every journey starts with a single step. Start now!",
+      "It's never too late to make today count!",
+      "Small progress is still progress. Let's go!"
     ]
   };
 
@@ -259,10 +259,41 @@ const App = (() => {
       document.body.appendChild(container);
     }
 
+    const TOAST_ICONS = {
+      '🎨': 'palette',
+      '✨': 'sparkles',
+      '🔔': 'bell',
+      '✅': 'check-circle-2',
+      '💾': 'download',
+      '❌': 'x-circle',
+      '📄': 'file-text',
+      '🗑️': 'trash-2',
+      '🔥': 'flame',
+      '🌱': 'sprout',
+      '💪': 'dumbbell',
+      '😴': 'moon-star',
+      '⭐': 'star',
+      '🏆': 'trophy',
+      '🍽': 'utensils',
+      '🎮': 'gamepad-2',
+      '📦': 'package'
+    };
+
+    let iconHtml = icon;
+    if (TOAST_ICONS[icon]) {
+      iconHtml = `<i data-lucide="${TOAST_ICONS[icon]}" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle;"></i>`;
+    } else if (icon && !icon.includes('<') && icon.length > 2) {
+      iconHtml = `<i data-lucide="${icon}" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle;"></i>`;
+    }
+
     const toast = document.createElement('div');
     toast.className = 'toast';
-    toast.innerHTML = `<span class="toast-icon">${icon}</span><span>${message}</span>`;
+    toast.innerHTML = `<span class="toast-icon">${iconHtml}</span><span>${message}</span>`;
     container.appendChild(toast);
+
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
 
     setTimeout(() => {
       toast.classList.add('toast-exit');
