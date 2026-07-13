@@ -1885,3 +1885,182 @@ select:focus-visible {
     min-width: 100%;
   }
 }
+
+/* ============================================
+   PREMIUM STATISTICS PAGE REDESIGN
+   ============================================ */
+.stats-summary-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.stats-summary-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  box-shadow: var(--shadow-soft-sm);
+  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-summary-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 1.5px;
+  background: linear-gradient(135deg, transparent, transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: background var(--transition-base);
+}
+
+.stats-summary-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25), 0 0 15px var(--theme-glow);
+}
+
+.stats-summary-card:hover::after {
+  background: var(--theme-gradient);
+}
+
+.stats-summary-icon-container {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--theme-bg-gradient);
+  border: 1px solid var(--theme-border-color);
+  box-shadow: 0 0 10px var(--theme-glow);
+  color: var(--theme-color);
+  transition: transform var(--transition-base);
+}
+
+.stats-summary-icon-container svg {
+  width: 20px;
+  height: 20px;
+  filter: drop-shadow(0 0 3px var(--theme-color));
+}
+
+.stats-summary-card:hover .stats-summary-icon-container {
+  transform: scale(1.08) rotate(3deg);
+}
+
+.stats-summary-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.stats-summary-label {
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stats-summary-value {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-extrabold);
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+/* Charts Grid */
+.stats-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-lg);
+  margin-bottom: var(--space-3xl);
+}
+
+.stats-chart-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-soft-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.stats-chart-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow-lg);
+}
+
+.stats-chart-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stats-chart-title {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.stats-chart-title svg {
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+}
+
+.stats-chart-subtitle {
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+}
+
+.stats-chart-wrapper {
+  position: relative;
+  height: 200px;
+  width: 100%;
+}
+
+/* Responsive Overrides */
+@media (max-width: 1200px) {
+  .stats-summary-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-summary-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .stats-charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-summary-row {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+

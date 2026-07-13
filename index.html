@@ -8,10 +8,10 @@
   <title>LifeOS — Life Balance Dashboard</title>
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/themes.css">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/animations.css">
-  <link rel="stylesheet" href="css/premium.css">
+  <link rel="stylesheet" href="css/themes.css?v=3">
+  <link rel="stylesheet" href="css/style.css?v=3">
+  <link rel="stylesheet" href="css/animations.css?v=3">
+  <link rel="stylesheet" href="css/premium.css?v=3">
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
@@ -401,12 +401,82 @@
 
       <!-- ===== STATISTICS VIEW ===== -->
       <section id="view-stats" class="view-section">
-        <div class="page-header">
+        <div class="page-header" style="margin-bottom: var(--space-md);">
           <h1 class="greeting-text">Statistics <i data-lucide="trending-up" style="display:inline; width:32px; height:32px; vertical-align:middle;" class="lucide-icon"></i></h1>
           <p class="date-text">Your all-time performance overview</p>
         </div>
 
-        <div class="stats-grid stagger-children" id="stats-grid"></div>
+        <!-- Top row of compact summary cards -->
+        <div class="stats-summary-row" id="stats-summary-row"></div>
+
+        <!-- Grid of compact charts -->
+        <div class="stats-charts-grid">
+          <!-- 1. Weekly Trend -->
+          <div class="stats-chart-card animate-fade-in-up">
+            <div class="stats-chart-header">
+              <span class="stats-chart-title"><i data-lucide="activity"></i> Weekly Trend</span>
+              <span class="stats-chart-subtitle">Daily scores (last 7 logged days)</span>
+            </div>
+            <div class="stats-chart-wrapper">
+              <canvas id="stats-chart-weekly"></canvas>
+            </div>
+          </div>
+
+          <!-- 2. Monthly Trend -->
+          <div class="stats-chart-card animate-fade-in-up" style="animation-delay: 50ms">
+            <div class="stats-chart-header">
+              <span class="stats-chart-title"><i data-lucide="calendar"></i> Monthly Trend</span>
+              <span class="stats-chart-subtitle">Daily scores (last 30 logged days)</span>
+            </div>
+            <div class="stats-chart-wrapper">
+              <canvas id="stats-chart-monthly"></canvas>
+            </div>
+          </div>
+
+          <!-- 3. Mood Distribution -->
+          <div class="stats-chart-card animate-fade-in-up" style="animation-delay: 100ms">
+            <div class="stats-chart-header">
+              <span class="stats-chart-title"><i data-lucide="smile"></i> Mood Distribution</span>
+              <span class="stats-chart-subtitle">Derived from daily scores</span>
+            </div>
+            <div class="stats-chart-wrapper">
+              <canvas id="stats-chart-mood"></canvas>
+            </div>
+          </div>
+
+          <!-- 4. Habit Breakdown -->
+          <div class="stats-chart-card animate-fade-in-up" style="animation-delay: 150ms">
+            <div class="stats-chart-header">
+              <span class="stats-chart-title"><i data-lucide="check-circle-2"></i> Habit Breakdown</span>
+              <span class="stats-chart-subtitle">Category goal success rate (%)</span>
+            </div>
+            <div class="stats-chart-wrapper">
+              <canvas id="stats-chart-habit"></canvas>
+            </div>
+          </div>
+
+          <!-- 5. Productivity vs Sleep -->
+          <div class="stats-chart-card animate-fade-in-up" style="animation-delay: 200ms">
+            <div class="stats-chart-header">
+              <span class="stats-chart-title"><i data-lucide="bar-chart-3"></i> Productivity vs Sleep</span>
+              <span class="stats-chart-subtitle">Work & growth compared to sleep duration</span>
+            </div>
+            <div class="stats-chart-wrapper">
+              <canvas id="stats-chart-prod-sleep"></canvas>
+            </div>
+          </div>
+
+          <!-- 6. Category Performance -->
+          <div class="stats-chart-card animate-fade-in-up" style="animation-delay: 250ms">
+            <div class="stats-chart-header">
+              <span class="stats-chart-title"><i data-lucide="pie-chart"></i> Category Performance</span>
+              <span class="stats-chart-subtitle">Average hours vs daily goal</span>
+            </div>
+            <div class="stats-chart-wrapper">
+              <canvas id="stats-chart-categories"></canvas>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- ===== ANALYTICS VIEW ===== -->
@@ -686,7 +756,7 @@
   <script src="js/planner.js"></script>
   <script src="js/charts.js"></script>
   <script src="js/calendar.js"></script>
-  <script src="js/stats.js?v=2"></script>
+  <script src="js/stats.js?v=3"></script>
   <script src="js/analytics.js"></script>
   <script src="js/settings.js"></script>
 </body>
