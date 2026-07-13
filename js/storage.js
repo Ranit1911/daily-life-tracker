@@ -146,6 +146,13 @@ const Storage = (() => {
   function getDayData(dateStr) {
     return new Promise((resolve) => {
       const logs = _getLogs();
+      if (!logs[dateStr] && dateStr === getTodayString()) {
+        const newDay = createEmptyDay(dateStr);
+        logs[dateStr] = newDay;
+        _saveLogs(logs);
+        resolve(newDay);
+        return;
+      }
       resolve(logs[dateStr] || createEmptyDay(dateStr));
     });
   }
@@ -365,6 +372,10 @@ const Storage = (() => {
 
     // Count backwards from today
     const d = new Date();
+    const todayDs = getDateString(d);
+    if (!loggedDates.has(todayDs)) {
+      d.setDate(d.getDate() - 1);
+    }
     while (true) {
       const ds = getDateString(d);
       if (loggedDates.has(ds)) {
@@ -449,6 +460,10 @@ const Storage = (() => {
     const loggedDates = new Set(activeLogs.map(l => l.date));
 
     const d = new Date();
+    const todayDs = getDateString(d);
+    if (!loggedDates.has(todayDs)) {
+      d.setDate(d.getDate() - 1);
+    }
     while (true) {
       const ds = getDateString(d);
       if (loggedDates.has(ds)) { currentStreak++; d.setDate(d.getDate() - 1); }

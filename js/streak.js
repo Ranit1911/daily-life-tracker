@@ -45,6 +45,10 @@ const Streak = (() => {
 
       let streak = 0;
       const d = new Date();
+      const todayDs = Storage.getDateString(d);
+      if (!loggedDates.has(todayDs)) {
+        d.setDate(d.getDate() - 1);
+      }
       while (true) {
         const ds = Storage.getDateString(d);
         if (loggedDates.has(ds)) {

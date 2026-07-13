@@ -67,27 +67,27 @@ const Analytics = (() => {
 
   /* --- Calculate performance percentages (proportional, sums to 100%) --- */
   function getPerformanceStats() {
-    const logs = getAllLogsSorted();
-    if (logs.length === 0) return { good: 0, bad: 0, neutral: 0 };
+    try {
+      const val = localStorage.getItem('lifeos_logs');
+      const logs = val ? JSON.parse(val) : {};
+      const todayStr = Storage.getTodayString();
+      const todayLog = logs[todayStr];
 
-    let totalGoodExcess = 0, totalBadExcess = 0, totalHours = 0;
+      if (!todayLog) return { good: 0, bad: 0, neutral: 0 };
 
-    logs.forEach(log => {
-      const result = classifyDay(log);
-      totalGoodExcess += result.goodExcess;
-      totalBadExcess += result.badExcess;
-      const dayTotal = Object.values(log.categories).reduce((s, v) => s + v, 0);
-      totalHours += dayTotal;
-    });
+      const dayTotal = Object.values(todayLog.categories).reduce((s, v) => s + Number(v), 0);
+      if (dayTotal <= 0) return { good: 0, bad: 0, neutral: 0 };
 
-    if (totalHours <= 0) return { good: 0, bad: 0, neutral: 0 };
+      const result = classifyDay(todayLog);
+      
+      const goodPct = Math.round((result.goodExcess / dayTotal) * 100);
+      const badPct = Math.round((result.badExcess / dayTotal) * 100);
+      const neutralPct = Math.max(0, 100 - goodPct - badPct);
 
-    // Proportions out of total hours tracked
-    const goodPct = Math.round((totalGoodExcess / totalHours) * 100);
-    const badPct = Math.round((totalBadExcess / totalHours) * 100);
-    const neutralPct = Math.max(0, 100 - goodPct - badPct);
-
-    return { good: goodPct, bad: badPct, neutral: neutralPct };
+      return { good: goodPct, bad: badPct, neutral: neutralPct };
+    } catch {
+      return { good: 0, bad: 0, neutral: 0 };
+    }
   }
 
   /* --- Render Performance Circles on Dashboard --- */

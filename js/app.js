@@ -6,6 +6,36 @@
 const App = (() => {
   /* --- Event Bus --- */
   const _listeners = {};
+  let lastCheckedDate = Storage.getTodayString();
+
+  async function checkDayRollover() {
+    const todayStr = Storage.getTodayString();
+    if (lastCheckedDate !== todayStr) {
+      lastCheckedDate = todayStr;
+      
+      // Auto-create empty day in storage
+      await Storage.getDayData(todayStr);
+      
+      // Refresh Dashboard module
+      if (typeof Dashboard !== 'undefined') {
+        await Dashboard.refresh();
+      }
+      
+      // Refresh Widgets timeline
+      if (typeof Widgets !== 'undefined') {
+        Widgets.refreshTimeline();
+      }
+      
+      // Refresh Planner
+      if (typeof Planner !== 'undefined') {
+        Planner.renderPlannerTasks();
+        Planner.renderLogEntries();
+      }
+      
+      // Notify other modules via Event Bus
+      emit('dataChanged');
+    }
+  }
 
   function on(event, callback) {
     if (!_listeners[event]) _listeners[event] = [];
@@ -175,6 +205,7 @@ const App = (() => {
 
     currentView = hash;
     emit('viewChanged', hash);
+    checkDayRollover();
   }
 
   /* --- Ripple Effect --- */
@@ -292,6 +323,14 @@ const App = (() => {
     Stats.init();
     Analytics.init();
     Settings.init();
+
+    // Day rollover listeners
+    setInterval(checkDayRollover, 10000);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        checkDayRollover();
+      }
+    });
 
     // Re-init Lucide icons after all modules render
     setTimeout(() => initLucideIcons(), 100);
