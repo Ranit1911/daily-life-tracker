@@ -14,6 +14,7 @@ const Settings = (() => {
     setupExport();
     setupExportPDF();
     setupImport();
+    setupImportPDF();
     setupReset();
     setupGoalsConfig();
 
@@ -312,6 +313,95 @@ const Settings = (() => {
           setTimeout(() => window.location.reload(), 1500);
         } catch (err) {
           App.showToast('❌', 'Import failed: ' + err.message);
+        }
+      });
+
+      input.click();
+    });
+  }
+
+  /* --- Import PDF --- */
+  function setupImportPDF() {
+    const btn = document.getElementById('btn-import-pdf');
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.pdf';
+
+      input.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+          if (!window.pdfjsLib) {
+            throw new Error('PDF library not loaded yet');
+          }
+
+          App.showToast('⏳', 'Parsing PDF...');
+
+          const arrayBuffer = await file.arrayBuffer();
+          const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          
+          let fullText = "";
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            fullText += textContent.items.map(s => s.str).join(" ") + " ";
+          }
+
+          // Parse table rows
+          // Date, Score, Growth, Sleep, Maint., Workout, Relief, Storage
+          // Example: 2026-07-13 85% 2h 8h 1h 1h 2h 0h
+          const regex = /(\d{4}-\d{2}-\d{2})\s+(\d+)%\s+([\d.]+)h\s+([\d.]+)h\s+([\d.]+)h\s+([\d.]+)h\s+([\d.]+)h\s+([\d.]+)h/g;
+          
+          let match;
+          const parsedLogs = [];
+          while ((match = regex.exec(fullText)) !== null) {
+            parsedLogs.push({
+              date: match[1],
+              score: parseInt(match[2]),
+              categories: {
+                growth: parseFloat(match[3]),
+                sleep: parseFloat(match[4]),
+                maintenance: parseFloat(match[5]),
+                workout: parseFloat(match[6]),
+                relief: parseFloat(match[7]),
+                storage: parseFloat(match[8])
+              },
+              notes: ""
+            });
+          }
+
+          if (parsedLogs.length === 0) {
+            throw new Error('No valid logs found in the PDF. Make sure it is a LifeOS report.');
+          }
+
+          const currentData = await Storage.getAllData();
+          
+          const existingLogs = currentData.dailyLogs || [];
+          const logMap = {};
+          existingLogs.forEach(log => logMap[log.date] = log);
+          
+          parsedLogs.forEach(log => {
+             if(logMap[log.date]) {
+                 logMap[log.date] = { ...logMap[log.date], categories: { ...logMap[log.date].categories, ...log.categories }, score: log.score };
+             } else {
+                 logMap[log.date] = log;
+             }
+          });
+          
+          currentData.dailyLogs = Object.values(logMap);
+
+          await Storage.importData(currentData);
+          App.showToast('✅', `Imported ${parsedLogs.length} logs! Refreshing...`);
+          
+          setTimeout(() => window.location.reload(), 1500);
+
+        } catch (err) {
+          console.error(err);
+          App.showToast('❌', 'PDF Import failed: ' + err.message);
         }
       });
 

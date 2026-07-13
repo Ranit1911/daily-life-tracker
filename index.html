@@ -22,6 +22,16 @@
   <!-- jsPDF & AutoTable -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+  <!-- pdf.js for importing PDFs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <script>
+    // Ensure pdf.js worker is correctly configured
+    window.pdfjsLib = window['pdfjs-dist/build/pdf'];
+    if (window.pdfjsLib) {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    }
+  </script>
 </head>
 <body>
   <div class="app-layout">
@@ -669,11 +679,21 @@
               <div class="settings-item-info">
                 <div class="settings-item-icon"><i data-lucide="upload"></i></div>
                 <div class="settings-item-text">
-                  <h4>Import Data</h4>
+                  <h4>Import Data (JSON)</h4>
                   <p>Restore from a JSON backup file</p>
                 </div>
               </div>
-              <button class="settings-btn ripple-container" id="btn-import">Import</button>
+              <button class="settings-btn ripple-container" id="btn-import">Import JSON</button>
+            </div>
+            <div class="settings-item">
+              <div class="settings-item-info">
+                <div class="settings-item-icon"><i data-lucide="file-up"></i></div>
+                <div class="settings-item-text">
+                  <h4>Import Data (PDF)</h4>
+                  <p>Restore logs from a PDF report</p>
+                </div>
+              </div>
+              <button class="settings-btn ripple-container" id="btn-import-pdf">Import PDF</button>
             </div>
             <div class="settings-item">
               <div class="settings-item-info">
