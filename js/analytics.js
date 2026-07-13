@@ -310,22 +310,16 @@ const Analytics = (() => {
     const logs = getAllLogsSorted();
     const dayLabels = logs.map((_, i) => `Day ${i + 1}`);
 
-    // Compute cumulative percentages
-    let cumulativeGoodExcess = 0;
-    let cumulativeBadExcess = 0;
-    let cumulativeTotalHours = 0;
+    // Compute daily percentages instead of cumulative percentages
     const goodPcts = [], badPcts = [], neutralPcts = [];
 
     logs.forEach((log) => {
       const result = classifyDay(log);
-      cumulativeGoodExcess += result.goodExcess;
-      cumulativeBadExcess += result.badExcess;
-      const dayTotal = Object.values(log.categories).reduce((s, v) => s + v, 0);
-      cumulativeTotalHours += dayTotal;
+      const dayTotal = Object.values(log.categories).reduce((s, v) => s + Number(v), 0);
 
-      if (cumulativeTotalHours > 0) {
-        const goodPct = Math.round((cumulativeGoodExcess / cumulativeTotalHours) * 100);
-        const badPct = Math.round((cumulativeBadExcess / cumulativeTotalHours) * 100);
+      if (dayTotal > 0) {
+        const goodPct = Math.round((result.goodExcess / dayTotal) * 100);
+        const badPct = Math.round((result.badExcess / dayTotal) * 100);
         const neutralPct = Math.max(0, 100 - goodPct - badPct);
 
         goodPcts.push(goodPct);
@@ -437,7 +431,7 @@ const Analytics = (() => {
             },
             title: {
               display: true,
-              text: 'Cumulative %',
+              text: 'Daily %',
               color: getComputedStyle(document.documentElement)
                 .getPropertyValue('--text-secondary').trim(),
               font: { size: 12, weight: '500' }
